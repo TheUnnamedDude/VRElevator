@@ -4,10 +4,11 @@ using System.Collections;
 public class TargetScript : MonoBehaviour {
 
     GameController _controller;
+    
 
     // Use this for initialization
     void Start () {
-        _controller = GameObject.FindObjectOfType<Terrain>().GetComponent<GameController>();
+        _controller = (GameController) FindObjectOfType(typeof(GameController));
     }
 	
 	// Update is called once per frame
@@ -15,14 +16,24 @@ public class TargetScript : MonoBehaviour {
 	
 	}
 
-    void Hit()
+    void OnCollisionEnter(Collision collision)
     {
-        GetComponent<MeshRenderer>().enabled = false;
-        foreach (ParticleSystem _system in gameObject.GetComponentsInChildren<ParticleSystem>(true))
-        {
-            _system.Play();
-        }
-        _controller.SendMessage("New target");
+        //Debug.Log("Target hit!");
         Destroy(gameObject);
+        _controller.OnTargetDestroy();
+        
     }
+
+
+
+    //void Hit()
+    //{
+    //    GetComponent<MeshRenderer>().enabled = false;
+    //    foreach (ParticleSystem _system in gameObject.GetComponentsInChildren<ParticleSystem>(true))
+    //    {
+    //        _system.Play();
+    //    }
+    //    _controller.SendMessage("New target");
+    //    Destroy(gameObject);
+    //}
 }

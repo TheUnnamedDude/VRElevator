@@ -3,83 +3,30 @@ using System.Collections;
 using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
-
-    int MIN = -15;
-    int MAX = 15;
-    int SCORE = 0;
-    float TIMER = 0.0f;
-    bool PLAYING = true;
-    public GameObject FirstTaget;
+    public bool IsRunning
+    {
+        get;
+        set;
+    }
 
     // Use this for initialization
     void Start () {
-	    
+        IsRunning = true;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (PLAYING)
+            
+    }
+
+    public void OnTargetDestroy()
+    {
+        Debug.Log(GameObject.FindGameObjectsWithTag("Target").Length);
+        
+        if (GameObject.FindGameObjectsWithTag("Target").Length <= 1) //Off by 1 so default set to 1 so we can destroy the object after running this method
         {
-            TIMER += Time.deltaTime;
-            DisplayTime();
-            if (SCORE >= 20)
-            {
-                EndGame();
-            }
+            Debug.Log("You cleared this level!");
         }
     }
-
-    string FormatTimer()
-    {
-        if (TIMER <= 60.0f)
-        {
-            return (Mathf.Round(TIMER * 100) / 100).ToString();
-        }
-        else
-        {
-            int displayTimeMin = (int)(TIMER / 60.0f);
-            float displayTimeSec = Mathf.Round((TIMER % 60) * 10 / 10);
-            if (displayTimeSec < 10)
-            {
-                return displayTimeMin.ToString() + ":0" + displayTimeSec.ToString();
-            }
-            else
-            {
-                return displayTimeMin.ToString() + ":" + displayTimeSec.ToString();
-            }
-        }
-    }
-
-    void DisplayTime()
-    {
-        GameObject.FindGameObjectWithTag("Scoreboard").GetComponent<Text>().text = "Time: "
-        + FormatTimer()
-        + System.Environment.NewLine
-        + "Targets hit: " + SCORE + "/20";
-    }
-
-    public void NewTarget()
-    {
-        SCORE++;
-        float xVal = Random.Range(MIN, MAX);
-        float yVal = Random.Range(2.0f, 5.0f);
-        float zVal = Random.Range(MIN, MAX);
-        Vector3 TargetPos = new Vector3(xVal, yVal, zVal);
-        Instantiate(FirstTaget, TargetPos, FirstTaget.transform.rotation);
-    }
-
-    void EndGame()
-    {
-        PLAYING = false;
-        if (!PlayerPrefs.HasKey("BestTime") || PlayerPrefs.GetFloat("BestTime") < TIMER)
-        {
-            PlayerPrefs.SetFloat("BestTime", TIMER);
-            GameObject.FindGameObjectWithTag("Scoreboard").GetComponent<Text>().text = "Time: "
-            + FormatTimer()
-            + System.Environment.NewLine
-            + "New High Score!";
-        }
-    }
-
 
 }
