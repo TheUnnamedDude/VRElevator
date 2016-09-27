@@ -24,6 +24,8 @@ public class ControllerManager : MonoBehaviour {
             Rigidbody bulletInstance;
             bulletInstance = Instantiate(bullet, barrelOpening.position, barrelOpening.rotation) as Rigidbody;
             bulletInstance.AddForce(barrelOpening.forward * 10000 * Speed);
+            //while (true)
+            device.TriggerHapticPulse(3999);
         }
 	}
 }
