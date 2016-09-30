@@ -4,24 +4,25 @@ using System.Collections;
 public class TargetScript : MonoBehaviour {
 
     GameController _controller;
-    
+    public AudioClip TargetHit;
+    private new AudioSource _audio;
 
     // Use this for initialization
     void Start () {
+        _audio = GetComponent<AudioSource>();
         _controller = (GameController) FindObjectOfType(typeof(GameController));
     }
 	
 	// Update is called once per frame
 	void Update () {
-	
 	}
 
     void OnCollisionEnter(Collision collision)
     {
+        _audio.PlayOneShot(TargetHit, 1f);
         //Debug.Log("Target hit!");
-        Destroy(gameObject);
+        //Destroy(gameObject);
         _controller.OnTargetDestroy();
-        
     }
 
 
