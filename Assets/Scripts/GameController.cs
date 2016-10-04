@@ -112,7 +112,7 @@ public class GameController : MonoBehaviour
                 if (IsValidSpawn(spawnPosition, TargetGameObject.GetComponent<Collider>().bounds.extents))
                 {
                     //Debug.Log("Spawning target");
-                    var target = (GameObject) Instantiate(TargetGameObject, spawnPosition, Quaternion.identity, Scene);
+                    var target = (GameObject) Instantiate(TargetGameObject, spawnPosition, TargetGameObject.transform.rotation, Scene);
                     spawnFound = true;
                 }
                 else
@@ -235,13 +235,12 @@ public class GameController : MonoBehaviour
         // finally calculate the x and y with x = distance * Math.cos(degrees) and y = distance * Math.sin(degrees)
 
         var direction = directions[_rng.Next(directions.Length)];
-        var radian = (_rng.NextDouble() * 80.0 + (double) direction - 45.0) * (Math.PI / 180);
+        var degrees = _rng.NextDouble() * 80.0 + (double)direction - 45.0;
+        Debug.Log("Degrees: " + degrees);
+        var radian =  degrees * (Math.PI / 180);
         var distance = 100;//MinDistance + _rng.NextDouble() * (MaxDistance - MinDistance);
         var x = distance * Math.Cos(radian);
         var z = distance * Math.Sin(radian);
-        Debug.Log("Direction " + radian);
-        //Debug.Log("Distance " + distance);
-        Debug.Log("x=" + x + "z=" + z);
         return new Vector3((float) x, 0.0f, (float) z);
     }
 

@@ -17,14 +17,22 @@ public class TargetScript : MonoBehaviour {
 	void Update () {
 	}
 
-    void OnCollisionEnter(Collision collision)
+    /*void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.tag == "Ammunition")
+        {
+
+        }
+        
+    }*/
+
+    public void Hit()
     {
         _audio.PlayOneShot(TargetHit, 1f);
         //Debug.Log("Target hit!");
         Destroy(gameObject);
         _controller.OnTargetDestroy();
     }
-
 
 
     //void Hit()
