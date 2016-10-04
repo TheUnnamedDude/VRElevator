@@ -89,18 +89,21 @@ public class GameController : MonoBehaviour
             .Cast<ElevatorDirection>()
             .ToList();
         var directions = new ElevatorDirection[GetElevatorSidesForLevel()];
+		Debug.Log("Starting level " + _level);
         for (int i = 0; i < directions.Length; i++)
         {
-            Debug.Log("Spawning targets at " + directions[i]);
-            var directionIndex = _rng.Next(directions.Length);
+            var directionIndex = _rng.Next(availableDirections.Count);
+			Debug.Log("Test " + directionIndex);
             directions[i] = availableDirections[directionIndex];
             availableDirections.RemoveAt(directionIndex);
+            Debug.Log("Spawning targets at " + directions[i]);
         }
 
         _timeLimit += GetTimeForLevel();
 
         float floorY = GameObject.FindGameObjectWithTag("Floor").transform.position.y;
         int numberOfSpawns = GetTargetSpawnsForLevel();
+		Debug.Log("Spawned " + numberOfSpawns + " targets");
         for (int i = 0; i < numberOfSpawns; i++)
         {
             bool spawnFound = false;
@@ -121,6 +124,7 @@ public class GameController : MonoBehaviour
                 }
             }
         }
+		_level++;
     }
 
     /// <summary>
@@ -236,7 +240,7 @@ public class GameController : MonoBehaviour
 
         var direction = directions[_rng.Next(directions.Length)];
         var degrees = _rng.NextDouble() * 80.0 + (double)direction - 45.0;
-        Debug.Log("Degrees: " + degrees);
+        //Debug.Log("Degrees: " + degrees);
         var radian =  degrees * (Math.PI / 180);
         var distance = 100;//MinDistance + _rng.NextDouble() * (MaxDistance - MinDistance);
         var x = distance * Math.Cos(radian);

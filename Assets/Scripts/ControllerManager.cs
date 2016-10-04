@@ -6,8 +6,8 @@ public class ControllerManager : MonoBehaviour {
     private SteamVR_TrackedObject trackedObject;
     private SteamVR_Controller.Device device;
 
-    public Rigidbody bullet;
-    public Transform barrelOpening;
+    public Rigidbody Bullet;
+    public Transform BarrelOpening;
     public float Speed = 10;
     public float _recoilTime = 0.5F;
     private float _lastShot = 0f;
@@ -26,18 +26,39 @@ public class ControllerManager : MonoBehaviour {
 	void Update () {
         device = SteamVR_Controller.Input((int)trackedObject.index);
 
-        if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger) && _lastShot >= _recoilTime)
+		RaycastHit hit;
+		Vector3 ShotDirection = BarrelOpening.transform.forward;
+		Ray hitScan = new Ray(BarrelOpening.position, ShotDirection);
+
+		if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger) && _lastShot >= _recoilTime)
         {
             audio.PlayOneShot(Shot, 1f);
-            Rigidbody bulletInstance;
+			/*Rigidbody bulletInstance;
             bulletInstance = Instantiate(bullet, barrelOpening.position, barrelOpening.rotation) as Rigidbody;
-            bulletInstance.AddForce(barrelOpening.forward * 10000 * Speed);
-            //while (true)
-            device.TriggerHapticPulse(3999);
-            audio.PlayOneShot(Cock, 1f);
-            //bulletInstance.rotation.SetFromToRotation();
-            _lastShot = 0;
-        }
+            bulletInstance.AddForce(barrelOpening.forward * 10000 * Speed);*/
+			//while (true)
+			
+			if (Physics.Raycast(BarrelOpening.position, ShotDirection, out hit))
+			{
+				TargetScript targetScript = hit.collider.gameObject.GetComponent<TargetScript>();
+				if (targetScript != null)
+				{
+					targetScript.Hit();
+					Debug.DrawRay(BarrelOpening.position, hit.point, Color.green, 2.0f);
+				}
+			}
+
+			Rigidbody bulletInstance;
+			bulletInstance = Instantiate(Bullet, BarrelOpening.position, BarrelOpening.rotation) as Rigidbody;
+			bulletInstance.AddForce(ShotDirection * 10000f * Speed);
+
+			device.TriggerHapticPulse(3999);
+			audio.PlayOneShot(Cock, 1f);
+			_lastShot = 0;
+		}
+		
+        //bulletInstance.rotation.SetFromToRotation();
+       
         if (_lastShot < _recoilTime)
             _lastShot += Time.deltaTime;
 	}
