@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
+    public Transform Scene;
     public Transform Elevator;
     public GameObject TargetGameObject;
     public float BaseTimePerLevel;
@@ -83,7 +84,7 @@ public class GameController : MonoBehaviour
             Destroy(gObj);
         }
 
-        Debug.Log("Starting spawn");
+        //Debug.Log("Starting spawn");
         List<ElevatorDirection> availableDirections = Enum.GetValues(typeof(ElevatorDirection))
             .Cast<ElevatorDirection>()
             .ToList();
@@ -106,16 +107,17 @@ public class GameController : MonoBehaviour
             for (int j = 0; j < 3 && !spawnFound; j++)
             {
                 // TODO: Floor position
-                Vector3 spawnPosition = GetRandomPosition(directions);
+                var rand = GetRandomPosition(directions);
+                Vector3 spawnPosition = Elevator.position + rand;
                 if (IsValidSpawn(spawnPosition, TargetGameObject.GetComponent<Collider>().bounds.extents))
                 {
-                    Debug.Log("Spawning target");
-                    var target = (GameObject) Instantiate(TargetGameObject, spawnPosition, Quaternion.identity);
+                    //Debug.Log("Spawning target");
+                    var target = (GameObject) Instantiate(TargetGameObject, spawnPosition, Quaternion.identity, Scene);
                     spawnFound = true;
                 }
                 else
                 {
-                    Debug.Log("Failed to spawn object");
+                    //Debug.Log("Failed to spawn object");
                 }
             }
         }
@@ -209,7 +211,6 @@ public class GameController : MonoBehaviour
             Collider collider = target.GetComponent<Collider>();
             if (IsWithinBounds(target.transform.position, FakeHalfBounds(collider.bounds), toSpawnPosition, toSpawnBounds))
             {
-                Debug.Log(target.transform.position + " would collide with " + toSpawnPosition);
                 return false;
             }
         }
@@ -219,7 +220,6 @@ public class GameController : MonoBehaviour
             Collider collider = obstacle.GetComponent<Collider>();
             if (IsWithinBounds(obstacle.transform.position, FakeHalfBounds(collider.bounds), toSpawnPosition, toSpawnBounds))
             {
-                Debug.Log(obstacle.transform.position + " would collide with " + toSpawnPosition);
                 return false;
             }
         }
@@ -235,11 +235,14 @@ public class GameController : MonoBehaviour
         // finally calculate the x and y with x = distance * Math.cos(degrees) and y = distance * Math.sin(degrees)
 
         var direction = directions[_rng.Next(directions.Length)];
-        var degrees = _rng.NextDouble() * 80.0 + (int) direction;
-        var distance = MinDistance + _rng.NextDouble() * (MaxDistance - MinDistance);
-        var x = distance * Math.Cos(degrees);
-        var y = distance * Math.Sin(degrees);
-        return new Vector3((float) x, 0.0f, (float) y);
+        var radian = (_rng.NextDouble() * 80.0 + (double) direction - 45.0) * (Math.PI / 180);
+        var distance = 100;//MinDistance + _rng.NextDouble() * (MaxDistance - MinDistance);
+        var x = distance * Math.Cos(radian);
+        var z = distance * Math.Sin(radian);
+        Debug.Log("Direction " + radian);
+        //Debug.Log("Distance " + distance);
+        Debug.Log("x=" + x + "z=" + z);
+        return new Vector3((float) x, 0.0f, (float) z);
     }
 
     public Vector3 FakeHalfBounds(Bounds bounds)
