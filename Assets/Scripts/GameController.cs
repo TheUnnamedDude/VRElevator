@@ -110,12 +110,14 @@ public class GameController : MonoBehaviour
             for (int j = 0; j < 3 && !spawnFound; j++)
             {
                 // TODO: Floor position
-                var rand = GetRandomPosition(directions);
+                var direction = GetRandomDirection(directions);
+                var rand = GetRandomPosition(direction);
                 Vector3 spawnPosition = Elevator.position + rand;
-                if (IsValidSpawn(spawnPosition, TargetGameObject.GetComponent<Collider>().bounds.extents))
+                if (IsValidSpawn(spawnPosition, TargetGameObject.GetComponentInChildren<Collider>().bounds.extents))
                 {
                     //Debug.Log("Spawning target");
-                    var target = (GameObject) Instantiate(TargetGameObject, spawnPosition, TargetGameObject.transform.rotation, Scene);
+                    var target = (GameObject)Instantiate(TargetGameObject, spawnPosition, TargetGameObject.transform.rotation, Scene);
+                    target.transform.LookAt(Elevator);
                     spawnFound = true;
                 }
                 else
@@ -231,14 +233,18 @@ public class GameController : MonoBehaviour
         return true;
     }
 
-    public Vector3 GetRandomPosition(ElevatorDirection[] directions)
+    public ElevatorDirection GetRandomDirection(ElevatorDirection[] directions)
+    {
+        return directions[_rng.Next(directions.Length)];
+    }
+
+    public Vector3 GetRandomPosition(ElevatorDirection direction)
     {
         // I think the best way of doing this would be to base it off randomizing a angle and then how far from
         // the center we should spawn the object. Then we figure what direction the object should be spawned.
         // When we know the distance and angle we multiply the angle with the offset for this direction and
         // finally calculate the x and y with x = distance * Math.cos(degrees) and y = distance * Math.sin(degrees)
 
-        var direction = directions[_rng.Next(directions.Length)];
         var degrees = _rng.NextDouble() * 80.0 + (double)direction - 45.0;
         //Debug.Log("Degrees: " + degrees);
         var radian =  degrees * (Math.PI / 180);

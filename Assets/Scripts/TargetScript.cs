@@ -30,7 +30,8 @@ public class TargetScript : MonoBehaviour {
     {
         _audio.PlayOneShot(TargetHit, 1f);
         //Debug.Log("Target hit!");
-        Destroy(gameObject);
+        //Destroy(gameObject);
+        Destroy(transform.parent.gameObject);
         _controller.OnTargetDestroy();
     }
 
