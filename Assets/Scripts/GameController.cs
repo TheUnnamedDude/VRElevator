@@ -8,12 +8,17 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
+    private readonly int START_LEVEL = 1;
+
     public Transform Scene;
     public Transform Elevator;
     public GameObject TargetGameObject;
     public float BaseTimePerLevel;
     public double MinDistance;
     public double MaxDistance;
+    public float TimePointsLevelModifier = 0.2f;
+    public float TimePointsPerSecond = 10.0f;
+    public float TargetPointsLevelModifier = 0.2f;
 
     private System.Random _rng;
     private int _seed;
@@ -22,6 +27,10 @@ public class GameController : MonoBehaviour
     private float _timeElapsed;
     private float _timeLimit;
     private int _score;
+
+    private float _pointsFromLevel = 0;
+    private float _timeElapsedForLevel = 0f;
+    private float _expectedLevelTime;
 
     private readonly int MIN_FOV = 90;
     private readonly int MAX_FOV = 360;
@@ -45,6 +54,11 @@ public class GameController : MonoBehaviour
         set;
     }
 
+    public int Score
+    {
+        get { return _score; }
+    }
+
     public Transform[] SpawnPoints;
 
     // Use this for initialization
@@ -57,7 +71,13 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update ()
     {
-
+        //
+        _timeElapsed += Time.deltaTime;
+        if (_timeElapsed > _timeLimit)
+        {
+            // TODO: Game over, handle this
+        }
+        _timeElapsedForLevel += Time.deltaTime;
     }
 
     public void InitializeRound()
@@ -66,8 +86,25 @@ public class GameController : MonoBehaviour
         FinishLevel();
     }
 
+    public int CalculateLevelScore()
+    {
+        var score = 0f;
+        var spareTime = _timeElapsedForLevel - _expectedLevelTime;
+        if (spareTime > 0)
+        {
+            score += (spareTime * TimePointsPerSecond) * (((float) _level) * TimePointsLevelModifier);
+        }
+        score += ((float) _pointsFromLevel) * (((float) _level) * TargetPointsLevelModifier);
+
+        // Reset values
+        _timeElapsedForLevel = 0;
+        _pointsFromLevel = 0;
+        return (int) score;
+    }
+
     public void OnTargetDestroy()
     {
+        _pointsFromLevel += 10; // TODO: Pass the target type as a parameter and add score based on it
         Debug.Log(GameObject.FindGameObjectsWithTag("Target").Length);
 
         if (GameObject.FindGameObjectsWithTag("Target").Length <= 1) //Off by 1 so default set to 1 so we can destroy the object after running this method
@@ -78,6 +115,11 @@ public class GameController : MonoBehaviour
 
     public void FinishLevel()
     {
+        if (_level > START_LEVEL)
+        {
+            _pointsFromLevel = CalculateLevelScore();
+            _pointsFromLevel = 0;
+        }
         // Make sure we don't have any game objects left
         foreach (var gObj in GameObject.FindGameObjectsWithTag("Target"))
         {
@@ -99,7 +141,8 @@ public class GameController : MonoBehaviour
             Debug.Log("Spawning targets at " + directions[i]);
         }
 
-        _timeLimit += GetTimeForLevel();
+        _expectedLevelTime = GetTimeForLevel();
+        _timeLimit += _expectedLevelTime;
 
         float floorY = GameObject.FindGameObjectWithTag("Floor").transform.position.y;
         int numberOfSpawns = GetTargetSpawnsForLevel();
@@ -140,19 +183,11 @@ public class GameController : MonoBehaviour
 
     private int GetTargetSpawnsForLevel()
     {
-        if (_level == 1)
+        if (_level <= 3)
         {
-            return 2;
+            return _level + 1;
         }
-        else if (_level == 2)
-        {
-            return 3;
-        }
-        else if (_level == 3)
-        {
-            return 3;
-        }
-        if (_level > 3)
+        else if (_level > 3)
         {
             return _rng.Next(3, 5);
         }
