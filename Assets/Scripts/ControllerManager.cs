@@ -45,7 +45,7 @@ public class ControllerManager : MonoBehaviour {
 
 			Rigidbody bulletInstance;
 			bulletInstance = Instantiate(Bullet, BarrelOpening.position, BarrelOpening.rotation) as Rigidbody;
-			bulletInstance.AddForce(ShotDirection * 10000f * Speed);
+			bulletInstance.AddForce(ShotDirection * 50000f * Speed);
 
 			device.TriggerHapticPulse(3999);
 			audio.PlayOneShot(Cock, 1f);

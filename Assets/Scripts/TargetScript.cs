@@ -36,12 +36,14 @@ public class TargetScript : MonoBehaviour {
     public void Hit()
     {
         //_audio.PlayOneShot(TargetHit, 1f);
-        var animator = GetComponent<Animator>();
-        animator.SetTrigger("TriggerTargetFall");
-        _alive = false;
-        
-        Destroy(transform.parent.gameObject, AnimationClip.length/2);
-        _controller.OnTargetDestroy();
+
+        if (Alive)
+        {
+            _alive = false;
+            GetComponent<Animator>().SetTrigger("TriggerTargetFall");
+            Destroy(transform.parent.gameObject, AnimationClip.length / 2);
+            _controller.OnTargetDestroy();
+        }
     }
 
 

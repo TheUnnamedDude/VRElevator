@@ -163,13 +163,14 @@ public class GameController : MonoBehaviour
         _timeLimit += _expectedLevelTime;
 
         float floorY = GameObject.FindGameObjectWithTag("Floor").transform.position.y;
-        int numberOfSpawns = GetTargetSpawnsForLevel();;
+        int numberOfSpawns = GetTargetSpawnsForLevel();
+        Debug.Log("Number of spawns" + numberOfSpawns);
         for (int i = 0; i < numberOfSpawns; i++)
         {
             bool spawnFound = false;
-            for (int j = 0; j < 3 && !spawnFound; j++)
+            for (int j = 0; j < 3  && !spawnFound; j++)
             {
-                // TODO: Floor position
+                
                 var direction = GetRandomDirection(directions);
                 var rand = GetRandomPosition(direction);
                 Vector3 spawnPosition = Elevator.position + rand;
@@ -197,7 +198,7 @@ public class GameController : MonoBehaviour
     /// <returns>A float representing the time you gained in seconds</returns>
     private float GetTimeForLevel()
     {
-        return 20.0f;
+        return 10.0f;
     }
 
     private int GetTargetSpawnsForLevel()
@@ -206,23 +207,23 @@ public class GameController : MonoBehaviour
         {
             return _level + 1;
         }
-        else if (_level > 3)
+        else if (_level < 10)
         {
             return _rng.Next(3, 5);
         }
-        else if (_level > 10)
+        else if (_level < 20)
         {
             return _rng.Next(3, 10);
         }
-        else if (_level > 20)
+        else if (_level < 25)
         {
             return _rng.Next(10, 20);
         }
-        else if (_level > 25)
+        else if (_level < 30)
         {
             return _rng.Next(15, 30);
         }
-        else if (_level > 30)
+        else if (_level < 40)
         {
             return _rng.Next(25, 40);
         }
@@ -302,7 +303,7 @@ public class GameController : MonoBehaviour
         var degrees = _rng.NextDouble() * 80.0 + (double)direction - 45.0;
         //Debug.Log("Degrees: " + degrees);
         var radian =  degrees * (Math.PI / 180);
-        var distance = 100;//MinDistance + _rng.NextDouble() * (MaxDistance - MinDistance);
+        var distance = /*MaxDistance; /*/ MinDistance + _rng.NextDouble() * (MaxDistance - MinDistance);
         var x = distance * Math.Cos(radian);
         var z = distance * Math.Sin(radian);
         return new Vector3((float) x, 0.0f, (float) z);
