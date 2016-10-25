@@ -13,7 +13,6 @@ public class MouseLookShoot : MonoBehaviour {
 	void Update () {
         RaycastHit hit;
         Vector3 ShotDirection = BarrelOpening.transform.forward;
-        Ray hitScan = new Ray(BarrelOpening.position, ShotDirection);
         if (Input.GetMouseButtonDown(0))
         {
             if (Physics.Raycast(BarrelOpening.position, ShotDirection, out hit))

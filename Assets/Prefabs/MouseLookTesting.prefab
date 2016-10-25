@@ -55,6 +55,7 @@ GameObject:
   - 33: {fileID: 33000012445669876}
   - 136: {fileID: 136000011116002956}
   - 23: {fileID: 23000012399837722}
+  - 114: {fileID: 114000013398421490}
   m_Layer: 0
   m_Name: MouseLookTesting
   m_TagString: Untagged
@@ -223,6 +224,7 @@ GameObject:
   - 114: {fileID: 114000010229503184}
   - 114: {fileID: 114000013235994282}
   - 114: {fileID: 114000012494413972}
+  - 120: {fileID: 120000010398971054}
   m_Layer: 0
   m_Name: Controller (right)
   m_TagString: Untagged
@@ -421,10 +423,10 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000010636558490}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -6.8041687, y: 15.466613, z: -25.343431}
+  m_LocalRotation: {x: -0.0046076193, y: -0, z: -0, w: 0.9999894}
+  m_LocalPosition: {x: -6.8041687, y: 15.39, z: -23.26}
   m_LocalScale: {x: 6, y: 10, z: 6}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -0.522, y: 0, z: 0}
   m_Children:
   - {fileID: 4000011806698156}
   m_Father: {fileID: 0}
@@ -859,9 +861,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e985e2ad959a0c49921e083612cbcbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bullet: {fileID: 54000013788084600, guid: a99cbace2b08f834c85e3e86b90b0007, type: 2}
-  barrelOpening: {fileID: 4000011726447556}
-  speed: 10000
+  Bullet: {fileID: 54000013788084600, guid: a99cbace2b08f834c85e3e86b90b0007, type: 2}
+  BarrelOpening: {fileID: 4000011726447556}
+  speed: 15000
 --- !u!114 &114000013235994282
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -880,6 +882,29 @@ MonoBehaviour:
   padPressed: 0
   padTouched: 0
   gripped: 0
+--- !u!114 &114000013398421490
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010636558490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 202cebdc2f5a7d347b37168f7edb21cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Scene: {fileID: 0}
+  Elevator: {fileID: 0}
+  TargetGameObject: {fileID: 1000012429439978, guid: 16df2f83e2351b7488877ee433e26260,
+    type: 2}
+  ScoreDisplayController: {fileID: 0}
+  BaseTimePerLevel: 0
+  MinDistance: 0
+  MaxDistance: 0
+  TimePointsLevelModifier: 0.2
+  TimePointsPerSecond: 10
+  TargetPointsLevelModifier: 0.2
+  SpawnPoints: []
 --- !u!114 &114000014186869350
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -898,6 +923,48 @@ MonoBehaviour:
   currentYRot: 0
   xRotVelocity: 0
   yRotVelocity: 0
+--- !u!120 &120000010398971054
+LineRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013886403354}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a6dbb96b9d112024d000e929e39e7c39, type: 2}
+  m_SubsetIndices: 
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_SelectedWireframeHidden: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_Positions:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 1}
+  m_Parameters:
+    startWidth: 1
+    endWidth: 1
+    m_StartColor:
+      serializedVersion: 2
+      rgba: 4294967295
+    m_EndColor:
+      serializedVersion: 2
+      rgba: 4294967295
+  m_UseWorldSpace: 1
 --- !u!136 &136000011116002956
 CapsuleCollider:
   m_ObjectHideFlags: 1

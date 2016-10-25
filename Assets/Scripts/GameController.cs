@@ -1,10 +1,7 @@
 ﻿using System;
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
-using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
@@ -113,12 +110,25 @@ public class GameController : MonoBehaviour
     public void OnTargetDestroy()
     {
         _targetScore += CalculateScoreForTarget();
-        Debug.Log(GameObject.FindGameObjectsWithTag("Target").Length);
+        Debug.Log(GetNumberOfTargetsAlive());
 
-        if (GameObject.FindGameObjectsWithTag("Target").Length <= 1) //Off by 1 so default set to 1 so we can destroy the object after running this method
+        if (GetNumberOfTargetsAlive() <= 0)
         {
             FinishLevel();
         }
+    }
+
+    private int GetNumberOfTargetsAlive()
+    {
+        int targetsAlive = 0;
+        foreach (var target in GameObject.FindGameObjectsWithTag("Target")) {
+            TargetScript targetScript = target.GetComponent<TargetScript>();
+            if (targetScript.Alive)
+            {
+                targetsAlive++;
+            }
+        }
+        return targetsAlive;
     }
 
     public void FinishLevel()
@@ -153,8 +163,7 @@ public class GameController : MonoBehaviour
         _timeLimit += _expectedLevelTime;
 
         float floorY = GameObject.FindGameObjectWithTag("Floor").transform.position.y;
-        int numberOfSpawns = GetTargetSpawnsForLevel();
-		Debug.Log("Spawned " + numberOfSpawns + " targets");
+        int numberOfSpawns = GetTargetSpawnsForLevel();;
         for (int i = 0; i < numberOfSpawns; i++)
         {
             bool spawnFound = false;
@@ -178,7 +187,8 @@ public class GameController : MonoBehaviour
                 }
             }
         }
-		_level++;
+        Debug.Log("Spawned " + numberOfSpawns + " targets");
+        _level++;
     }
 
     /// <summary>
@@ -258,7 +268,7 @@ public class GameController : MonoBehaviour
     {
         foreach (GameObject target in GameObject.FindGameObjectsWithTag("Target"))
         {
-            Collider collider = target.GetComponent<Collider>();
+            Collider collider = target.GetComponentInChildren<Collider>(); //target.GetComponent<Collider>();
             if (IsWithinBounds(target.transform.position, FakeHalfBounds(collider.bounds), toSpawnPosition, toSpawnBounds))
             {
                 return false;

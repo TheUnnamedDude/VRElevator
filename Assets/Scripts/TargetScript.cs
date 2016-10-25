@@ -7,10 +7,17 @@ public class TargetScript : MonoBehaviour {
     public AudioClip TargetHit;
     private new AudioSource _audio;
 
+    public AnimationClip AnimationClip;
+    private bool _alive = true;
+
+    public bool Alive { get { return _alive; }
+    }
+
     // Use this for initialization
     void Start () {
         _audio = GetComponent<AudioSource>();
         _controller = (GameController) FindObjectOfType(typeof(GameController));
+        
     }
 	
 	// Update is called once per frame
@@ -28,10 +35,12 @@ public class TargetScript : MonoBehaviour {
 
     public void Hit()
     {
-        _audio.PlayOneShot(TargetHit, 1f);
-        //Debug.Log("Target hit!");
-        //Destroy(gameObject);
-        Destroy(transform.parent.gameObject);
+        //_audio.PlayOneShot(TargetHit, 1f);
+        var animator = GetComponent<Animator>();
+        animator.SetTrigger("TriggerTargetFall");
+        _alive = false;
+        
+        Destroy(transform.parent.gameObject, AnimationClip.length/2);
         _controller.OnTargetDestroy();
     }
 

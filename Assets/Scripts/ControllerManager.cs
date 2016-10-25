@@ -28,15 +28,10 @@ public class ControllerManager : MonoBehaviour {
 
 		RaycastHit hit;
 		Vector3 ShotDirection = BarrelOpening.transform.forward;
-		Ray hitScan = new Ray(BarrelOpening.position, ShotDirection);
 
 		if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger) && _lastShot >= _recoilTime)
         {
             audio.PlayOneShot(Shot, 1f);
-			/*Rigidbody bulletInstance;
-            bulletInstance = Instantiate(bullet, barrelOpening.position, barrelOpening.rotation) as Rigidbody;
-            bulletInstance.AddForce(barrelOpening.forward * 10000 * Speed);*/
-			//while (true)
 			
 			if (Physics.Raycast(BarrelOpening.position, ShotDirection, out hit))
 			{
@@ -56,8 +51,6 @@ public class ControllerManager : MonoBehaviour {
 			audio.PlayOneShot(Cock, 1f);
 			_lastShot = 0;
 		}
-		
-        //bulletInstance.rotation.SetFromToRotation();
        
         if (_lastShot < _recoilTime)
             _lastShot += Time.deltaTime;
