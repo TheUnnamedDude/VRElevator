@@ -26,6 +26,4 @@ public class ScoreDispalyController : MonoBehaviour {
     }
 }
 
-
-// .ToString() + " pioints";
     

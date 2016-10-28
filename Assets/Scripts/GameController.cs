@@ -2,10 +2,12 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
     private readonly int START_LEVEL = 1;
+
 
     public Transform Scene;
     public Transform Elevator;
@@ -26,7 +28,14 @@ public class GameController : MonoBehaviour
     private float _timeLimit;
     private float _timeScore;
     private float _targetScore;
-    
+
+    //test
+    private bool _gameOver;
+    private SteamVR_Controller.Device device;
+    public Text gameover;
+    public string test;
+
+
     private float _timeElapsedForLevel = 0f;
     private float _expectedLevelTime;
 
@@ -71,17 +80,39 @@ public class GameController : MonoBehaviour
     void Start ()
     {
         IsRunning = true;
+        _gameOver = false;
         InitializeRound();
     }
 
     // Update is called once per frame
     void Update ()
     {
+        test = gameover.text;
         //
         _timeElapsed += Time.deltaTime;
         if (_timeElapsed > _timeLimit)
-        {
-            // TODO: Game over, handle this
+        { 
+            _gameOver = true;
+            gameover.text = "GAME OVER - PRESS TRIGGER TO RESTART";
+            Time.timeScale = 0f;
+
+            if (/*device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger) || */Input.GetKeyDown(KeyCode.Mouse0))
+            {
+                 
+                Time.timeScale = 1;
+                _gameOver = false;
+                _level = 1;
+                _timeElapsed = 0;
+                _timeLimit = 0;
+                Reset();
+                gameover.text = "";
+                foreach (var gObj in GameObject.FindGameObjectsWithTag("Target"))
+                {
+                    Destroy(gObj);
+                }
+                Start();
+            }
+           
         }
         _timeElapsedForLevel += Time.deltaTime;
     }
@@ -105,6 +136,11 @@ public class GameController : MonoBehaviour
 
     public float CalculateScoreForTarget() { // TODO: Pass the target type as a parameter and add score based on it
         return 10.0f * (((float)_level) * TargetPointsLevelModifier);
+    }
+
+    public void Reset() {
+        _timeScore = 0;
+        _targetScore = 0;
     }
 
     public void OnTargetDestroy()
@@ -138,6 +174,7 @@ public class GameController : MonoBehaviour
             _timeScore = CalculateLevelTimeScore();
             _timeElapsedForLevel = 0;
         }
+
         // Make sure we don't have any game objects left
         foreach (var gObj in GameObject.FindGameObjectsWithTag("Target"))
         {
@@ -198,7 +235,7 @@ public class GameController : MonoBehaviour
     /// <returns>A float representing the time you gained in seconds</returns>
     private float GetTimeForLevel()
     {
-        return 10.0f;
+        return 7.0f;
     }
 
     private int GetTargetSpawnsForLevel()
