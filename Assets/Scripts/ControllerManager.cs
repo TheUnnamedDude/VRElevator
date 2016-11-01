@@ -1,58 +1,56 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class ControllerManager : MonoBehaviour {
 
-    private SteamVR_TrackedObject trackedObject;
+    private SteamVR_TrackedObject _trackedObject;
     private SteamVR_Controller.Device device;
 
     public Rigidbody Bullet;
     public Transform BarrelOpening;
     public float Speed = 10;
-    public float _recoilTime = 0.5F;
-    private float _lastShot = 0f;
+    public float RecoilTime = 0.5F;
+    private float _lastShot;
 
     public AudioClip Shot;
     public AudioClip Cock;
-    private new AudioSource audio;
+    private AudioSource _audio;
 
 	// Use this for initialization
 	void Start () {
-        trackedObject = GetComponent<SteamVR_TrackedObject>();
-        audio = GetComponent<AudioSource>();
+        _trackedObject = GetComponent<SteamVR_TrackedObject>();
+        _audio = GetComponent<AudioSource>();
     }
 	
 	// Update is called once per frame
 	void Update () {
-        device = SteamVR_Controller.Input((int)trackedObject.index);
+        device = SteamVR_Controller.Input((int)_trackedObject.index);
 
 		RaycastHit hit;
-		Vector3 ShotDirection = BarrelOpening.transform.forward;
 
-		if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger) && _lastShot >= _recoilTime)
-        {
-            audio.PlayOneShot(Shot, 1f);
+		if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger) && _lastShot >= RecoilTime)
+		{
+		    var shotDirection = Vector3.forward; //BarrelOpening.transform.forward;
+            _audio.PlayOneShot(Shot, 1f);
 			
-			if (Physics.Raycast(BarrelOpening.position, ShotDirection, out hit))
+			if (Physics.Raycast(BarrelOpening.position, shotDirection, out hit))
 			{
-				TargetScript targetScript = hit.collider.gameObject.GetComponent<TargetScript>();
+				TargetBehaviour targetScript = hit.collider.gameObject.GetComponent<TargetBehaviour>();
 				if (targetScript != null)
 				{
-					targetScript.Hit();
+					targetScript.OnHit();
 					Debug.DrawRay(BarrelOpening.position, hit.point, Color.green, 2.0f);
 				}
 			}
 
-			Rigidbody bulletInstance;
-			bulletInstance = Instantiate(Bullet, BarrelOpening.position, BarrelOpening.rotation) as Rigidbody;
-			bulletInstance.AddForce(ShotDirection * 50000f * Speed);
+			Rigidbody bulletInstance = Instantiate(Bullet, BarrelOpening.position, BarrelOpening.rotation) as Rigidbody;
+			bulletInstance.AddForce(shotDirection * 50000f * Speed);
 
 			device.TriggerHapticPulse(3999);
-			audio.PlayOneShot(Cock, 1f);
+			GetComponent<AudioSource>().PlayOneShot(Cock, 1f);
 			_lastShot = 0;
 		}
        
-        if (_lastShot < _recoilTime)
+        if (_lastShot < RecoilTime)
             _lastShot += Time.deltaTime;
 	}
 }

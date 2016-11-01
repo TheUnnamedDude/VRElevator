@@ -1,46 +1,29 @@
 ﻿using System;
 using UnityEngine;
-using System.Collections.Generic;
 using System.Linq;
-using UnityEngine.UI;
+using Zenject;
+using Object = UnityEngine.Object;
 
-public class GameController : MonoBehaviour
+public class GameController : IInitializable, ITickable
 {
-    private readonly int START_LEVEL = 1;
-
-
-    public Transform Scene;
-    public Transform Elevator;
-    public GameObject TargetGameObject;
-    public ScoreDispalyController ScoreDisplayController;
     public float BaseTimePerLevel;
-    public double MinDistance;
-    public double MaxDistance;
-    public float TimePointsLevelModifier = 0.2f;
-    public float TimePointsPerSecond = 10.0f;
-    public float TargetPointsLevelModifier = 0.2f;
+    public double MinDistance = 40;
+    public double MaxDistance = 130;
+
+    [Inject]
+    private ScoreManager _scoreManager;
+
+    [Inject]
+    private TargetBehaviour.Factory _targetFactory;
+
+    [Inject(Id = "Elevator")]
+    private GameObject _elevator;
+
+    [Inject(Id = "Scene")]
+    private GameObject _scene;
 
     private System.Random _rng;
     private int _seed;
-
-    private int _level = 1;
-    private float _timeElapsed;
-    private float _timeLimit;
-    private float _timeScore;
-    private float _targetScore;
-
-    //test
-    private bool _gameOver;
-    private SteamVR_Controller.Device device;
-    public Text gameover;
-    public string test;
-
-
-    private float _timeElapsedForLevel = 0f;
-    private float _expectedLevelTime;
-
-    private readonly int MIN_FOV = 90;
-    private readonly int MAX_FOV = 360;
 
     public int Seed
     {
@@ -61,60 +44,18 @@ public class GameController : MonoBehaviour
         set;
     }
 
-    public int Score
-    {
-        get { return (int) (_timeScore + _targetScore); }
-    }
-
-    public float TimeLeft {
-        get { return _timeLimit - _timeElapsed; }
-    }
-
-    public int Level {
-        get { return _level; }
-    }
-
-    public Transform[] SpawnPoints;
-
-    // Use this for initialization
-    void Start ()
+    public void Initialize ()
     {
         IsRunning = true;
-        _gameOver = false;
         InitializeRound();
     }
 
-    // Update is called once per frame
-    void Update ()
+    public void Tick ()
     {
-        test = gameover.text;
-        //
-        _timeElapsed += Time.deltaTime;
-        if (_timeElapsed > _timeLimit)
-        { 
-            _gameOver = true;
-            gameover.text = "GAME OVER - PRESS TRIGGER TO RESTART";
-            Time.timeScale = 0f;
-
-            if (/*device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger) || */Input.GetKeyDown(KeyCode.Mouse0))
-            {
-                 
-                Time.timeScale = 1;
-                _gameOver = false;
-                _level = 1;
-                _timeElapsed = 0;
-                _timeLimit = 0;
-                Reset();
-                gameover.text = "";
-                foreach (var gObj in GameObject.FindGameObjectsWithTag("Target"))
-                {
-                    Destroy(gObj);
-                }
-                Start();
-            }
-           
+        if (_scoreManager.GameOver)
+        {
+              // TODO: Redo this
         }
-        _timeElapsedForLevel += Time.deltaTime;
     }
 
     public void InitializeRound()
@@ -123,31 +64,9 @@ public class GameController : MonoBehaviour
         FinishLevel();
     }
 
-    public float CalculateLevelTimeScore()
-    {
-        var spareTime = _timeElapsedForLevel - _expectedLevelTime;
-        if (spareTime > 0)
-        {
-            return (spareTime * TimePointsPerSecond) * (((float) _level) * TimePointsLevelModifier);
-        } else {
-            return 0f;
-        }
-    }
-
-    public float CalculateScoreForTarget() { // TODO: Pass the target type as a parameter and add score based on it
-        return 10.0f * (((float)_level) * TargetPointsLevelModifier);
-    }
-
-    public void Reset() {
-        _timeScore = 0;
-        _targetScore = 0;
-    }
-
     public void OnTargetDestroy()
     {
-        _targetScore += CalculateScoreForTarget();
-        Debug.Log(GetNumberOfTargetsAlive());
-
+        _scoreManager.AddTargetScore(10.0f); // TODO: Pass target type
         if (GetNumberOfTargetsAlive() <= 0)
         {
             FinishLevel();
@@ -158,7 +77,7 @@ public class GameController : MonoBehaviour
     {
         int targetsAlive = 0;
         foreach (var target in GameObject.FindGameObjectsWithTag("Target")) {
-            TargetScript targetScript = target.GetComponent<TargetScript>();
+            TargetBehaviour targetScript = target.GetComponent<TargetBehaviour>();
             if (targetScript.Alive)
             {
                 targetsAlive++;
@@ -169,144 +88,105 @@ public class GameController : MonoBehaviour
 
     public void FinishLevel()
     {
-        if (_level > START_LEVEL)
-        {
-            _timeScore = CalculateLevelTimeScore();
-            _timeElapsedForLevel = 0;
-        }
-
         // Make sure we don't have any game objects left
         foreach (var gObj in GameObject.FindGameObjectsWithTag("Target"))
         {
-            Destroy(gObj);
+            Object.Destroy(gObj);
         }
 
-        //Debug.Log("Starting spawn");
-        List<ElevatorDirection> availableDirections = Enum.GetValues(typeof(ElevatorDirection))
+        _scoreManager.NextLevel();
+
+        var availableDirections = Enum.GetValues(typeof(ElevatorDirection))
             .Cast<ElevatorDirection>()
             .ToList();
         var directions = new ElevatorDirection[GetElevatorSidesForLevel()];
-		Debug.Log("Starting level " + _level);
-        for (int i = 0; i < directions.Length; i++)
+		Debug.Log("Starting level " + _scoreManager.Level);
+        for (var i = 0; i < directions.Length; i++)
         {
             var directionIndex = _rng.Next(availableDirections.Count);
-			Debug.Log("Test " + directionIndex);
             directions[i] = availableDirections[directionIndex];
             availableDirections.RemoveAt(directionIndex);
-            Debug.Log("Spawning targets at " + directions[i]);
         }
 
-        _expectedLevelTime = GetTimeForLevel();
-        _timeLimit += _expectedLevelTime;
-
-        float floorY = GameObject.FindGameObjectWithTag("Floor").transform.position.y;
-        int numberOfSpawns = GetTargetSpawnsForLevel();
-        Debug.Log("Number of spawns" + numberOfSpawns);
-        for (int i = 0; i < numberOfSpawns; i++)
+        var floorY = GameObject.FindGameObjectWithTag("Floor").transform.position.y;
+        var numberOfSpawns = GetTargetSpawnsForLevel();
+        for (var i = 0; i < numberOfSpawns; i++)
         {
-            bool spawnFound = false;
-            for (int j = 0; j < 3  && !spawnFound; j++)
+            var spawnFound = false;
+            for (var j = 0; j < 3  && !spawnFound; j++)
             {
-                
+
                 var direction = GetRandomDirection(directions);
                 var rand = GetRandomPosition(direction);
-                Vector3 spawnPosition = Elevator.position + rand;
+                var spawnPosition = _elevator.transform.position + rand;
                 spawnPosition.y = floorY;
-                if (IsValidSpawn(spawnPosition, TargetGameObject.GetComponentInChildren<Collider>().bounds.extents))
-                {
-                    //Debug.Log("Spawning target");
-                    var target = (GameObject)Instantiate(TargetGameObject, spawnPosition, TargetGameObject.transform.rotation, Scene);
-                    target.transform.LookAt(Elevator);
-                    spawnFound = true;
-                }
-                else
-                {
-                    //Debug.Log("Failed to spawn object");
-                }
+                //if (!IsValidSpawn(spawnPosition, _targetGameObject.GetComponentInChildren<Collider>().bounds.extents))
+                //    continue;
+                var target = _targetFactory.Create();
+                target.transform.parent = _scene.transform;
+                target.transform.position = spawnPosition;
+                target.transform.LookAt(_elevator.transform);
+                spawnFound = true;
             }
         }
         Debug.Log("Spawned " + numberOfSpawns + " targets");
-        _level++;
-    }
-
-    /// <summary>
-    /// Calculate the time you gain for finishing the current level
-    /// </summary>
-    /// <returns>A float representing the time you gained in seconds</returns>
-    private float GetTimeForLevel()
-    {
-        return 7.0f;
     }
 
     private int GetTargetSpawnsForLevel()
     {
-        if (_level <= 3)
+        if (_scoreManager.Level <= 3)
         {
-            return _level + 1;
+            return _scoreManager.Level + 1;
         }
-        else if (_level < 10)
+        if (_scoreManager.Level < 10)
         {
             return _rng.Next(3, 5);
         }
-        else if (_level < 20)
+        if (_scoreManager.Level < 20)
         {
             return _rng.Next(3, 10);
         }
-        else if (_level < 25)
+        if (_scoreManager.Level < 25)
         {
             return _rng.Next(10, 20);
         }
-        else if (_level < 30)
+        if (_scoreManager.Level < 30)
         {
             return _rng.Next(15, 30);
         }
-        else if (_level < 40)
-        {
-            return _rng.Next(25, 40);
-        }
-        else
-        {
-            return 40;
-        }
+        return _scoreManager.Level < 40 ? _rng.Next(25, 40) : 40;
     }
 
     private int GetElevatorSidesForLevel()
     {
-        if (_level < 3)
+        if (_scoreManager.Level < 3)
         {
             return 1;
         }
-        else if (_level == 3)
+        if (_scoreManager.Level == 3)
         {
             return 2;
         }
-        else if (_level < 10)
+        if (_scoreManager.Level < 10)
         {
             return _rng.Next(1, 2);
         }
-        else if (_level < 15)
+        if (_scoreManager.Level < 15)
         {
             return _rng.Next(1, 3);
         }
-        else if (_level < 20)
+        if (_scoreManager.Level < 20)
         {
             return _rng.Next(2, 3);
         }
-        else if (_level < 25)
-        {
-            return _rng.Next(3, 4);
-        }
-        else
-        {
-            return 4;
-        }
+        return _scoreManager.Level < 25 ? _rng.Next(3, 4) : 4;
     }
 
     public bool IsValidSpawn(Vector3 toSpawnPosition, Vector3 toSpawnBounds)
     {
         foreach (GameObject target in GameObject.FindGameObjectsWithTag("Target"))
         {
-            Collider collider = target.GetComponentInChildren<Collider>(); //target.GetComponent<Collider>();
+            var collider = target.GetComponentInChildren<Collider>(); //target.GetComponent<Collider>();
             if (IsWithinBounds(target.transform.position, FakeHalfBounds(collider.bounds), toSpawnPosition, toSpawnBounds))
             {
                 return false;
@@ -315,7 +195,7 @@ public class GameController : MonoBehaviour
 
         foreach (GameObject obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
         {
-            Collider collider = obstacle.GetComponent<Collider>();
+            var collider = obstacle.GetComponent<Collider>();
             if (IsWithinBounds(obstacle.transform.position, FakeHalfBounds(collider.bounds), toSpawnPosition, toSpawnBounds))
             {
                 return false;
@@ -352,31 +232,22 @@ public class GameController : MonoBehaviour
         {
             return new Vector3(bounds.extents.x, bounds.extents.y, bounds.extents.x);
         }
-        else
-        {
-            return new Vector3(bounds.extents.z, bounds.extents.y, bounds.extents.z);
-        }
+        return new Vector3(bounds.extents.z, bounds.extents.y, bounds.extents.z);
     }
 
     public bool IsWithinBounds(Vector3 p1, Vector3 b1, Vector3 p2, Vector3 b2)
     {
-        float minXPos1 = p1.x - b1.x;
-        float maxXPos1 = p1.x + b1.x;
-        float minX2 = p2.x - b2.x;
-        float maxX2 = p2.x + b2.x;
-        if ((minXPos1 > minX2 && minXPos1 < maxX2) || (maxXPos1 < maxX2 && maxXPos1 > minX2))
-        {
-            return true;
-        }
-        float minZ1 = p1.z - b1.z;
-        float maxZ1 = p1.z + b1.z;
-        float minZ2 = p2.z - b2.z;
-        float maxZ2 = p2.z + b2.z;
-        if ((minZ1 > minZ2 && minZ1 < maxZ2) || (maxZ1 < maxZ2 && maxZ1 > minZ2))
-        {
-            return true;
-        }
-        return false;
+        var minXPos1 = p1.x - b1.x;
+        var maxXPos1 = p1.x + b1.x;
+        var minX2 = p2.x - b2.x;
+        var maxX2 = p2.x + b2.x;
+
+        var minZ1 = p1.z - b1.z;
+        var maxZ1 = p1.z + b1.z;
+        var minZ2 = p2.z - b2.z;
+        var maxZ2 = p2.z + b2.z;
+        return (minXPos1 > minX2 && minXPos1 < maxX2) || (maxXPos1 < maxX2 && maxXPos1 > minX2)
+               || (minZ1 > minZ2 && minZ1 < maxZ2) || (maxZ1 < maxZ2 && maxZ1 > minZ2);
     }
 
     public enum ElevatorDirection

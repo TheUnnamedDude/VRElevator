@@ -158,6 +158,72 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 15330093}
   m_Mesh: {fileID: 4300066, guid: d681d5c7fd5aba94bab128359b5dffcd, type: 3}
+--- !u!1 &22483822
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 22483825}
+  - 114: {fileID: 22483824}
+  - 114: {fileID: 22483823}
+  m_Layer: 0
+  m_Name: SceneContext
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &22483823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 22483822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b31a79c217fd7b94597a65a523450ebd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _settings:
+    Elevator: {fileID: 339834004}
+    Scene: {fileID: 731702098}
+    Bullet: {fileID: 0}
+    TargetPrefab: {fileID: 4000010074194646, guid: 16df2f83e2351b7488877ee433e26260,
+      type: 2}
+--- !u!114 &22483824
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 22483822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89715ad69b973a14899afa2c6730b30b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _installers:
+  - {fileID: 22483823}
+  _installerPrefabs: []
+  _scriptableObjectInstallers: []
+  _parentNewObjectsUnderRoot: 0
+  _contractNames: []
+  _parentContractName: 
+  _autoRun: 1
+--- !u!4 &22483825
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 22483822}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 19
 --- !u!1 &52146949
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,8 +471,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f347516d8dc9341baa756404a8f7d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetHit: {fileID: 8300000, guid: bfd94e7bcd1c7b14fbab0265e9db7326, type: 3}
-  AnimationClip: {fileID: 0}
 --- !u!54 &79984087
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -725,7 +789,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 3
   modelOverride: 
-  shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+  shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 3}
   verbose: 0
   createComponents: 1
   updateDynamically: 1
@@ -1206,7 +1270,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 339834005}
   m_Layer: 0
-  m_Name: Heis
+  m_Name: Elevator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1253,8 +1317,9 @@ GameObject:
   - 224: {fileID: 348264479}
   - 33: {fileID: 348264481}
   - 23: {fileID: 348264480}
+  - 114: {fileID: 348264482}
   m_Layer: 0
-  m_Name: Box002 (1)
+  m_Name: Scoreboard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1317,6 +1382,23 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 348264478}
   m_Mesh: {fileID: 4300022, guid: d681d5c7fd5aba94bab128359b5dffcd, type: 3}
+--- !u!114 &348264482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 348264478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8632a41f1bffe0a4abbce5ef34b821fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ScoreText: {fileID: 586430391}
+  TimeleftText: {fileID: 2139231139}
+  LevelText: {fileID: 480250518}
+  ScoreFormat: Score {0}
+  TimeLeftFormat: Time {0}
+  LevelTextFormat: Level {0}
 --- !u!1 &416587838
 GameObject:
   m_ObjectHideFlags: 0
@@ -1931,10 +2013,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74fc28488d20d454088c4210bcdff7e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Bullet: {fileID: 54000013788084600, guid: a99cbace2b08f834c85e3e86b90b0007, type: 2}
+  Bullet: {fileID: 0}
   BarrelOpening: {fileID: 760342275}
   Speed: 2
-  _recoilTime: 0.5
+  RecoilTime: 0.5
   Shot: {fileID: 8300000, guid: d3247579c549643a5b3a95f9224eaf3c, type: 3}
   Cock: {fileID: 8300000, guid: e7632c6401c09437e83de45d33c5858e, type: 3}
 --- !u!82 &644429635
@@ -2167,8 +2249,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f347516d8dc9341baa756404a8f7d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetHit: {fileID: 8300000, guid: bfd94e7bcd1c7b14fbab0265e9db7326, type: 3}
-  AnimationClip: {fileID: 0}
 --- !u!64 &659378841
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2526,10 +2606,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74fc28488d20d454088c4210bcdff7e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Bullet: {fileID: 54000013788084600, guid: a99cbace2b08f834c85e3e86b90b0007, type: 2}
+  Bullet: {fileID: 0}
   BarrelOpening: {fileID: 1198031443}
   Speed: 2
-  _recoilTime: 0.5
+  RecoilTime: 0.5
   Shot: {fileID: 8300000, guid: d3247579c549643a5b3a95f9224eaf3c, type: 3}
   Cock: {fileID: 8300000, guid: e7632c6401c09437e83de45d33c5858e, type: 3}
 --- !u!82 &732423104
@@ -3784,8 +3864,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f347516d8dc9341baa756404a8f7d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetHit: {fileID: 8300000, guid: bfd94e7bcd1c7b14fbab0265e9db7326, type: 3}
-  AnimationClip: {fileID: 0}
 --- !u!64 &1040753873
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -4741,7 +4819,19 @@ Prefab:
       propertyPath: MaxDistance
       value: 130
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 114000012494413972, guid: d769afc360284684d8e370e20806f850,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000013398421490, guid: d769afc360284684d8e370e20806f850,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 114000014186869350, guid: d769afc360284684d8e370e20806f850, type: 2}
+    - {fileID: 114000013398421490, guid: d769afc360284684d8e370e20806f850, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: d769afc360284684d8e370e20806f850, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &1302266328
@@ -4827,6 +4917,11 @@ Transform:
   - {fileID: 1828829749}
   m_Father: {fileID: 1600706214}
   m_RootOrder: 1
+--- !u!4 &1354245542 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4000011726447556, guid: d769afc360284684d8e370e20806f850,
+    type: 2}
+  m_PrefabInternal: {fileID: 1297652519}
 --- !u!1 &1370623412
 GameObject:
   m_ObjectHideFlags: 0
@@ -4858,13 +4953,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d9aabdacd3d83a4dafa9097ee1c155b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GameController: {fileID: 1512836034}
-  ScoreText: {fileID: 586430391}
-  TimeleftText: {fileID: 2139231139}
-  LevelText: {fileID: 480250518}
-  ScoreFormat: "Score:\t\t\t{0}"
-  TimeLeftFormat: "Time left:\t\t{0}.{1}"
-  LevelTextFormat: "Level:\t\t\t{0}"
 --- !u!114 &1370623414
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5147,12 +5235,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 10
---- !u!114 &1512836034 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114000013398421490, guid: d769afc360284684d8e370e20806f850,
-    type: 2}
-  m_PrefabInternal: {fileID: 1297652519}
-  m_Script: {fileID: 11500000, guid: 202cebdc2f5a7d347b37168f7edb21cf, type: 3}
 --- !u!1 &1514339425
 GameObject:
   m_ObjectHideFlags: 0
@@ -5291,7 +5373,6 @@ GameObject:
   - 23: {fileID: 1600706212}
   - 33: {fileID: 1600706211}
   - 114: {fileID: 1600706210}
-  - 114: {fileID: 1600706209}
   m_Layer: 0
   m_Name: '[CameraRig]'
   m_TagString: Player
@@ -5299,32 +5380,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &1600706209
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114000012423931952, guid: 4d293c8e162f3874b982baadd71153d2,
-    type: 2}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1600706208}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 202cebdc2f5a7d347b37168f7edb21cf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Scene: {fileID: 731702100}
-  Elevator: {fileID: 946688262}
-  TargetGameObject: {fileID: 1000012429439978, guid: 16df2f83e2351b7488877ee433e26260,
-    type: 2}
-  ScoreDisplayController: {fileID: 0}
-  BaseTimePerLevel: 0
-  MinDistance: 40
-  MaxDistance: 130
-  TimePointsLevelModifier: 0.2
-  TimePointsPerSecond: 10
-  TargetPointsLevelModifier: 0.2
-  gameover: {fileID: 827576369}
-  test: 
-  SpawnPoints: []
 --- !u!114 &1600706210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5486,6 +5541,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 14
+--- !u!1 &1626592910 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1000013212078944, guid: d769afc360284684d8e370e20806f850,
+    type: 2}
+  m_PrefabInternal: {fileID: 1297652519}
+--- !u!114 &1626592914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1626592910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e985e2ad959a0c49921e083612cbcbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Sens: 2
+  Bullet: {fileID: 0}
+  BarrelOpening: {fileID: 1354245542}
+  Speed: 15000
 --- !u!1 &1632788325
 GameObject:
   m_ObjectHideFlags: 0
@@ -6113,7 +6188,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 4
   modelOverride: 
-  shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+  shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 3}
   verbose: 0
   createComponents: 1
   updateDynamically: 1
@@ -6567,8 +6642,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74f347516d8dc9341baa756404a8f7d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetHit: {fileID: 8300000, guid: bfd94e7bcd1c7b14fbab0265e9db7326, type: 3}
-  AnimationClip: {fileID: 0}
 --- !u!64 &1925334577
 MeshCollider:
   m_ObjectHideFlags: 0
