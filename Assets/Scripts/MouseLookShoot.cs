@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
+using Zenject;
 
 public class MouseLookShoot : MonoBehaviour {
     public float Sens = 2f;
-    public Rigidbody Bullet;
+
+    [Inject(Id = "Bullet")]
+    public Transform Bullet;
     public Transform BarrelOpening;
     public float Speed;
 
@@ -30,8 +33,9 @@ public class MouseLookShoot : MonoBehaviour {
 	        }
 	        Debug.DrawRay(BarrelOpening.position, hit.point, Color.green, 2.0f);
 	    }
-            
-	    var bulletInstance = Instantiate(Bullet, BarrelOpening.position, BarrelOpening.rotation) as Rigidbody;
-	    bulletInstance.AddForce(shotDirection * Speed);
+
+	    var bullet = (Transform) Instantiate(Bullet, BarrelOpening.position, BarrelOpening.rotation);
+	    var bulletRigidbody = bullet.GetComponent<Rigidbody>();
+	    bulletRigidbody.AddForce(shotDirection * Speed);
 	}
 }

@@ -16,12 +16,6 @@ public class GameController : IInitializable, ITickable
     [Inject]
     private TargetBehaviour.Factory _targetFactory;
 
-    [Inject(Id = "Elevator")]
-    private GameObject _elevator;
-
-    [Inject(Id = "Scene")]
-    private GameObject _scene;
-
     private System.Random _rng;
     private int _seed;
 
@@ -118,14 +112,9 @@ public class GameController : IInitializable, ITickable
 
                 var direction = GetRandomDirection(directions);
                 var rand = GetRandomPosition(direction);
-                var spawnPosition = _elevator.transform.position + rand;
-                spawnPosition.y = floorY;
                 //if (!IsValidSpawn(spawnPosition, _targetGameObject.GetComponentInChildren<Collider>().bounds.extents))
                 //    continue;
-                var target = _targetFactory.Create();
-                target.transform.parent = _scene.transform;
-                target.transform.position = spawnPosition;
-                target.transform.LookAt(_elevator.transform);
+                var target = _targetFactory.CreateTarget(rand, floorY);
                 spawnFound = true;
             }
         }

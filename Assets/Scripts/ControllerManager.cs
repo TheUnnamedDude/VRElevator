@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
+using Zenject;
 
 public class ControllerManager : MonoBehaviour {
 
     private SteamVR_TrackedObject _trackedObject;
     private SteamVR_Controller.Device device;
 
-    public Rigidbody Bullet;
+    [Inject(Id = "Bullet")]
+    public Transform Bullet;
     public Transform BarrelOpening;
     public float Speed = 10;
     public float RecoilTime = 0.5F;
@@ -42,10 +44,11 @@ public class ControllerManager : MonoBehaviour {
 				}
 			}
 
-			Rigidbody bulletInstance = Instantiate(Bullet, BarrelOpening.position, BarrelOpening.rotation) as Rigidbody;
-			bulletInstance.AddForce(shotDirection * 50000f * Speed);
+		    var bullet = (Transform) Instantiate(Bullet, BarrelOpening.position, BarrelOpening.rotation);
+		    var bulletRigidbody = bullet.GetComponent<Rigidbody>();
+		    bulletRigidbody.AddForce(shotDirection * Speed);
 
-			device.TriggerHapticPulse(3999);
+		    device.TriggerHapticPulse(3999);
 			GetComponent<AudioSource>().PlayOneShot(Cock, 1f);
 			_lastShot = 0;
 		}

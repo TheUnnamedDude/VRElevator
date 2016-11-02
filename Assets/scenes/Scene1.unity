@@ -189,8 +189,9 @@ MonoBehaviour:
   _settings:
     Elevator: {fileID: 339834004}
     Scene: {fileID: 731702098}
-    Bullet: {fileID: 0}
     TargetPrefab: {fileID: 4000010074194646, guid: 16df2f83e2351b7488877ee433e26260,
+      type: 2}
+    BulletPrefab: {fileID: 4000011502426420, guid: a99cbace2b08f834c85e3e86b90b0007,
       type: 2}
 --- !u!114 &22483824
 MonoBehaviour:
