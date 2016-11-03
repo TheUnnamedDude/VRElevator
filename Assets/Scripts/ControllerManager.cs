@@ -1,16 +1,10 @@
 ﻿using UnityEngine;
 using Zenject;
 
-public class ControllerManager : MonoBehaviour {
+public class ControllerManager : BasePlayer {
 
     private SteamVR_TrackedObject _trackedObject;
     private SteamVR_Controller.Device device;
-
-    [Inject(Id = "Bullet")]
-    public Transform Bullet;
-    public Transform BarrelOpening;
-    public float Speed = 10;
-    public float RecoilTime = 0.5F;
     private float _lastShot;
 
     public AudioClip Shot;
@@ -25,35 +19,14 @@ public class ControllerManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        device = SteamVR_Controller.Input((int)_trackedObject.index);
+	    UpdateRecoilTime();
+	    device = SteamVR_Controller.Input((int)_trackedObject.index);
 
-		RaycastHit hit;
+	    if (!device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger) || !ShootBullet())
+	        return;
 
-		if (device.GetPressDown(SteamVR_Controller.ButtonMask.Trigger) && _lastShot >= RecoilTime)
-		{
-		    var shotDirection = Vector3.forward; //BarrelOpening.transform.forward;
-            _audio.PlayOneShot(Shot, 1f);
-			
-			if (Physics.Raycast(BarrelOpening.position, shotDirection, out hit))
-			{
-				TargetBehaviour targetScript = hit.collider.gameObject.GetComponent<TargetBehaviour>();
-				if (targetScript != null)
-				{
-					targetScript.OnHit();
-					Debug.DrawRay(BarrelOpening.position, hit.point, Color.green, 2.0f);
-				}
-			}
-
-		    var bullet = (Transform) Instantiate(Bullet, BarrelOpening.position, BarrelOpening.rotation);
-		    var bulletRigidbody = bullet.GetComponent<Rigidbody>();
-		    bulletRigidbody.AddForce(shotDirection * Speed);
-
-		    device.TriggerHapticPulse(3999);
-			GetComponent<AudioSource>().PlayOneShot(Cock, 1f);
-			_lastShot = 0;
-		}
-       
-        if (_lastShot < RecoilTime)
-            _lastShot += Time.deltaTime;
+	    _audio.PlayOneShot(Shot, 1f);
+	    device.TriggerHapticPulse(3999);
+	    GetComponent<AudioSource>().PlayOneShot(Cock, 1f);
 	}
 }

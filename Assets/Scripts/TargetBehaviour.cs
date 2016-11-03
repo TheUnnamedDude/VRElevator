@@ -22,7 +22,7 @@ public class TargetBehaviour : MonoBehaviour {
         _alive = false;
         _audio.PlayOneShot(TargetHit, 1f);
         GetComponentInChildren<Animator>().SetTrigger("TriggerTargetFall");
-        Destroy(gameObject, 2);
+        Destroy(gameObject, 1);
         _controller.OnTargetDestroy();
     }
 

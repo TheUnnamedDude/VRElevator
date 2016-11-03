@@ -3,7 +3,7 @@
 public class TimeToLiveBehaviour : MonoBehaviour {
     public float TimeToLive = 10;
 
-    private float _timeLived = 0;
+    private float _timeLived;
 
 	// Use this for initialization
 	void Start () {

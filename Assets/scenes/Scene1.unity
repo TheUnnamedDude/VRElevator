@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.1275832, g: 0.13438055, b: 0.121172495, a: 1}
+  m_IndirectSpecularColor: {r: 0.12758307, g: 0.1343804, b: 0.12117234, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -190,8 +190,6 @@ MonoBehaviour:
     Elevator: {fileID: 339834004}
     Scene: {fileID: 731702098}
     TargetPrefab: {fileID: 4000010074194646, guid: 16df2f83e2351b7488877ee433e26260,
-      type: 2}
-    BulletPrefab: {fileID: 4000011502426420, guid: a99cbace2b08f834c85e3e86b90b0007,
       type: 2}
 --- !u!114 &22483824
 MonoBehaviour:
@@ -2014,10 +2012,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74fc28488d20d454088c4210bcdff7e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Bullet: {fileID: 0}
-  BarrelOpening: {fileID: 760342275}
   Speed: 2
   RecoilTime: 0.5
+  BarrelOpening: {fileID: 760342275}
+  Bullet: {fileID: 0}
   Shot: {fileID: 8300000, guid: d3247579c549643a5b3a95f9224eaf3c, type: 3}
   Cock: {fileID: 8300000, guid: e7632c6401c09437e83de45d33c5858e, type: 3}
 --- !u!82 &644429635
@@ -2607,10 +2605,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74fc28488d20d454088c4210bcdff7e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Bullet: {fileID: 0}
-  BarrelOpening: {fileID: 1198031443}
   Speed: 2
   RecoilTime: 0.5
+  BarrelOpening: {fileID: 1198031443}
+  Bullet: {fileID: 0}
   Shot: {fileID: 8300000, guid: d3247579c549643a5b3a95f9224eaf3c, type: 3}
   Cock: {fileID: 8300000, guid: e7632c6401c09437e83de45d33c5858e, type: 3}
 --- !u!82 &732423104
@@ -4830,6 +4828,17 @@ Prefab:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114000012494413972, guid: d769afc360284684d8e370e20806f850,
+        type: 2}
+      propertyPath: Bullet
+      value: 
+      objectReference: {fileID: 4000011502426420, guid: a99cbace2b08f834c85e3e86b90b0007,
+        type: 2}
+    - target: {fileID: 114000012494413972, guid: d769afc360284684d8e370e20806f850,
+        type: 2}
+      propertyPath: Sens
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114000014186869350, guid: d769afc360284684d8e370e20806f850, type: 2}
     - {fileID: 114000013398421490, guid: d769afc360284684d8e370e20806f850, type: 2}
@@ -5558,10 +5567,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e985e2ad959a0c49921e083612cbcbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Sens: 2
-  Bullet: {fileID: 0}
-  BarrelOpening: {fileID: 1354245542}
   Speed: 15000
+  RecoilTime: 0.5
+  BarrelOpening: {fileID: 1354245542}
+  Bullet: {fileID: 4000011502426420, guid: a99cbace2b08f834c85e3e86b90b0007, type: 2}
+  Sens: 2
 --- !u!1 &1632788325
 GameObject:
   m_ObjectHideFlags: 0
