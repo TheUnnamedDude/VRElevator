@@ -26,4 +26,5 @@ public class DependencyInstaller : MonoInstaller<DependencyInstaller>
         public GameObject Scene;
         public Transform TargetPrefab;
     }
+
 }

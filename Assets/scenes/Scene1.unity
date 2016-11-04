@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12758307, g: 0.1343804, b: 0.12117234, a: 1}
+  m_IndirectSpecularColor: {r: 0.1275832, g: 0.13438055, b: 0.121172495, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -2013,9 +2013,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 2
-  RecoilTime: 0.5
   BarrelOpening: {fileID: 760342275}
   Bullet: {fileID: 0}
+  CurrentAmmo: 0
+  RecoilTime: 0
+  FiringMode: 0
+  FullAmmo: 0
+  TargetsHit: 0
+  FullAuto: 0
+  FiringCycle: 0
   Shot: {fileID: 8300000, guid: d3247579c549643a5b3a95f9224eaf3c, type: 3}
   Cock: {fileID: 8300000, guid: e7632c6401c09437e83de45d33c5858e, type: 3}
 --- !u!82 &644429635
@@ -2606,9 +2612,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 2
-  RecoilTime: 0.5
   BarrelOpening: {fileID: 1198031443}
   Bullet: {fileID: 0}
+  CurrentAmmo: 0
+  RecoilTime: 0
+  FiringMode: 0
+  FullAmmo: 0
+  TargetsHit: 0
+  FullAuto: 0
+  FiringCycle: 0
   Shot: {fileID: 8300000, guid: d3247579c549643a5b3a95f9224eaf3c, type: 3}
   Cock: {fileID: 8300000, guid: e7632c6401c09437e83de45d33c5858e, type: 3}
 --- !u!82 &732423104
@@ -4839,6 +4851,18 @@ Prefab:
       propertyPath: Sens
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 4000012968563254, guid: d769afc360284684d8e370e20806f850, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -0.389
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000012968563254, guid: d769afc360284684d8e370e20806f850, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 1.202
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000012968563254, guid: d769afc360284684d8e370e20806f850, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0.394
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114000014186869350, guid: d769afc360284684d8e370e20806f850, type: 2}
     - {fileID: 114000013398421490, guid: d769afc360284684d8e370e20806f850, type: 2}
@@ -5568,9 +5592,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 15000
-  RecoilTime: 0.5
   BarrelOpening: {fileID: 1354245542}
   Bullet: {fileID: 4000011502426420, guid: a99cbace2b08f834c85e3e86b90b0007, type: 2}
+  CurrentAmmo: 0
+  RecoilTime: 0
+  FiringMode: 0
+  FullAmmo: 0
+  TargetsHit: 0
+  FullAuto: 0
+  FiringCycle: 0
   Sens: 2
 --- !u!1 &1632788325
 GameObject:
