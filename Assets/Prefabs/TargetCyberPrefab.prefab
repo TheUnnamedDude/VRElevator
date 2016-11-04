@@ -58,6 +58,7 @@ GameObject:
   - 4: {fileID: 4000010074194646}
   - 114: {fileID: 114000012281141174}
   - 82: {fileID: 82000012680844832}
+  - 114: {fileID: 114000012864585352}
   m_Layer: 0
   m_Name: TargetCyberPrefab
   m_TagString: Target
@@ -302,9 +303,22 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000012429439978}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d49c23d5d575c3e4b9dcd8d12386555f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TargetHit: {fileID: 8300000, guid: 0391a139af5d8a346b18c06b476f3ffe, type: 3}
+--- !u!114 &114000012864585352
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000012429439978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e7f5c05660a24141983bb60df48e5ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaxHealth: 0
+  AnimationTime: 1
+  Direction: 0

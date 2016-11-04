@@ -1,21 +1,22 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 using UnityObject = UnityEngine.Object;
 
-public class LevelGenerator
+public class LevelGenerator : IInitializable
 {
-    [Inject]
-    private ScoreManager _scoreManager;
+    private readonly ElevatorDirection[] ALL_DIRECTIONS = {ElevatorDirection.North, ElevatorDirection.East,
+            ElevatorDirection.South, ElevatorDirection.West};
 
     [Inject]
-    private TargetBehaviour.Factory _targetFactory;
+    private ScoreManager _scoreManager;
 
     public double MinDistance = 40;
     public double MaxDistance = 130;
 
     private System.Random _rng;
+    private Dictionary<ElevatorDirection, List<Enemy>> _enemies = new Dictionary<ElevatorDirection, List<Enemy>>();
     private int _seed;
 
     public int Seed
@@ -31,6 +32,38 @@ public class LevelGenerator
         set { _seed = value; }
     }
 
+    public int NumberOfTargetsAlive
+    {
+        get
+        {
+            var count = 0;
+            foreach (var enemies in _enemies.Values)
+            {
+                foreach (var enemy in enemies)
+                {
+                    if (enemy.Alive)
+                    {
+                        count++;
+                    }
+                }
+            }
+            return count;
+        }
+    }
+
+    public void Initialize()
+    {
+        foreach (var direction in ALL_DIRECTIONS)
+        {
+            _enemies[direction] = new List<Enemy>();
+        }
+        foreach (var enemy in UnityObject.FindObjectsOfType<Enemy>())
+        {
+            _enemies[enemy.Direction].Add(enemy);
+        }
+        Reset();
+    }
+
     public void Reset()
     {
         _rng = new System.Random(Seed);
@@ -39,41 +72,35 @@ public class LevelGenerator
 
     public void FinishLevel()
     {
-        // Make sure we don't have any game objects left
-        foreach (var gObj in GameObject.FindGameObjectsWithTag("Target"))
+        foreach (var enemies in _enemies.Values)
         {
-            UnityObject.Destroy(gObj);
+            foreach (var enemy in enemies)
+            {
+                enemy.ResetEnemy();
+            }
         }
-
         _scoreManager.NextLevel();
 
-        var availableDirections = Enum.GetValues(typeof(ElevatorDirection))
-            .Cast<ElevatorDirection>()
-            .ToList();
-        var directions = new ElevatorDirection[GetElevatorSidesForLevel()];
+        var directions = GetElevatorSidesForLevel();
         Debug.Log("Starting level " + _scoreManager.Level);
-        for (var i = 0; i < directions.Length; i++)
+
+        var availableDirections = new List<ElevatorDirection>(ALL_DIRECTIONS);
+        var spawnableEnemies = new List<Enemy>();
+        for (var i = 0; i < directions; i++)
         {
             var directionIndex = _rng.Next(availableDirections.Count);
-            directions[i] = availableDirections[directionIndex];
+            var direction = availableDirections[directionIndex];
             availableDirections.RemoveAt(directionIndex);
+
+            spawnableEnemies.AddRange(_enemies[direction]);
         }
-
-        var floorY = GameObject.FindGameObjectWithTag("Floor").transform.position.y;
         var numberOfSpawns = GetTargetSpawnsForLevel();
-        for (var i = 0; i < numberOfSpawns; i++)
+        for (var i = 0; i < Math.Min(numberOfSpawns, spawnableEnemies.Count); i++)
         {
-            var spawnFound = false;
-            for (var j = 0; j < 3  && !spawnFound; j++)
-            {
-
-                var direction = GetRandomDirection(directions);
-                var rand = GetRandomPosition(direction);
-                //if (!IsValidSpawn(spawnPosition, _targetGameObject.GetComponentInChildren<Collider>().bounds.extents))
-                //    continue;
-                var target = _targetFactory.CreateTarget(rand, floorY);
-                spawnFound = true;
-            }
+            var enemyIndex = _rng.Next(spawnableEnemies.Count);
+            var enemy = spawnableEnemies[_rng.Next(enemyIndex)];
+            enemy.Show();
+            spawnableEnemies.RemoveAt(enemyIndex);
         }
         Debug.Log("Spawned " + numberOfSpawns + " targets");
     }
@@ -128,72 +155,9 @@ public class LevelGenerator
         return _scoreManager.Level < 25 ? _rng.Next(3, 4) : 4;
     }
 
-    public bool IsValidSpawn(Vector3 toSpawnPosition, Vector3 toSpawnBounds)
+    public ElevatorDirection GetRandomDirection(List<ElevatorDirection> directions)
     {
-        foreach (GameObject target in GameObject.FindGameObjectsWithTag("Target"))
-        {
-            var collider = target.GetComponentInChildren<Collider>(); //target.GetComponent<Collider>();
-            if (IsWithinBounds(target.transform.position, FakeHalfBounds(collider.bounds), toSpawnPosition, toSpawnBounds))
-            {
-                return false;
-            }
-        }
-
-        foreach (GameObject obstacle in GameObject.FindGameObjectsWithTag("Obstacle"))
-        {
-            var collider = obstacle.GetComponent<Collider>();
-            if (IsWithinBounds(obstacle.transform.position, FakeHalfBounds(collider.bounds), toSpawnPosition, toSpawnBounds))
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public ElevatorDirection GetRandomDirection(ElevatorDirection[] directions)
-    {
-        return directions[_rng.Next(directions.Length)];
-    }
-
-    public Vector3 GetRandomPosition(ElevatorDirection direction)
-    {
-        // I think the best way of doing this would be to base it off randomizing a angle and then how far from
-        // the center we should spawn the object. Then we figure what direction the object should be spawned.
-        // When we know the distance and angle we multiply the angle with the offset for this direction and
-        // finally calculate the x and y with x = distance * Math.cos(degrees) and y = distance * Math.sin(degrees)
-
-        var degrees = _rng.NextDouble() * 80.0 + (double)direction - 45.0;
-        //Debug.Log("Degrees: " + degrees);
-        var radian =  degrees * (Math.PI / 180);
-        var distance = /*MaxDistance; /*/ MinDistance + _rng.NextDouble() * (MaxDistance - MinDistance);
-        var x = distance * Math.Cos(radian);
-        var z = distance * Math.Sin(radian);
-        return new Vector3((float) x, 0.0f, (float) z);
-    }
-
-    public Vector3 FakeHalfBounds(Bounds bounds)
-    {
-        if (bounds.extents.x > bounds.extents.z)
-        {
-            return new Vector3(bounds.extents.x, bounds.extents.y, bounds.extents.x);
-        }
-        return new Vector3(bounds.extents.z, bounds.extents.y, bounds.extents.z);
-    }
-
-    public bool IsWithinBounds(Vector3 p1, Vector3 b1, Vector3 p2, Vector3 b2)
-    {
-        var minXPos1 = p1.x - b1.x;
-        var maxXPos1 = p1.x + b1.x;
-        var minX2 = p2.x - b2.x;
-        var maxX2 = p2.x + b2.x;
-
-        var minZ1 = p1.z - b1.z;
-        var maxZ1 = p1.z + b1.z;
-        var minZ2 = p2.z - b2.z;
-        var maxZ2 = p2.z + b2.z;
-        return (minXPos1 > minX2 && minXPos1 < maxX2) || (maxXPos1 < maxX2 && maxXPos1 > minX2)
-               || (minZ1 > minZ2 && minZ1 < maxZ2) || (maxZ1 < maxZ2 && maxZ1 > minZ2);
+        return directions[_rng.Next(directions.Count)];
     }
 
     public enum ElevatorDirection

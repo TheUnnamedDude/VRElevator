@@ -2,7 +2,7 @@
 using UnityEngine;
 using Zenject;
 
-public class GameController : IInitializable, ITickable
+public class GameController : ITickable
 {
     [Inject]
     private ScoreManager _scoreManager;
@@ -10,16 +10,12 @@ public class GameController : IInitializable, ITickable
     [Inject]
     private LevelGenerator _levelGenerator;
 
+    private bool _running = true;
+
     public bool IsRunning
     {
-        get;
-        set;
-    }
-
-    public void Initialize ()
-    {
-        IsRunning = true;
-        _levelGenerator.Reset();
+        get { return _running; }
+        set { _running = value;  }
     }
 
     public void Tick ()
@@ -30,22 +26,12 @@ public class GameController : IInitializable, ITickable
         }
     }
 
-    public void OnTargetDestroy()
+    public void OnTargetDestroy(float points)
     {
-        _scoreManager.AddTargetScore(10.0f); // TODO: Pass target type
-        if (NumberOfTargetsAlive <= 0)
+        _scoreManager.AddTargetScore(points); // TODO: Pass target type
+        if (_levelGenerator.NumberOfTargetsAlive <= 0)
         {
             _levelGenerator.FinishLevel();
-        }
-    }
-
-    private int NumberOfTargetsAlive
-    {
-        get
-        {
-            return GameObject.FindGameObjectsWithTag("Target")
-                .Select(target => target.GetComponent<TargetBehaviour>())
-                .Count(targetScript => targetScript.Alive);
         }
     }
 }

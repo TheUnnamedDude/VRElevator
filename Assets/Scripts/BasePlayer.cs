@@ -24,37 +24,33 @@ public class BasePlayer : MonoBehaviour
 
     public bool ShootBullet()
     {
-        if (CurrentAmmo >= 1)
+        if (CurrentAmmo < 1 || _lastShot < RecoilTime)
+            return false;
+
+        var bullet = (Transform)Instantiate(Bullet, BarrelOpening.position, BarrelOpening.rotation);
+        var bulletRigidbody = bullet.GetComponent<Rigidbody>();
+        bulletRigidbody.AddForce(BarrelOpening.forward * Speed);
+
+        RaycastHit hit;
+        if (Physics.Raycast(BarrelOpening.position, BarrelOpening.forward, out hit))
         {
-            if (_lastShot < RecoilTime)
-                return false;
-
-            var bullet = (Transform)Instantiate(Bullet, BarrelOpening.position, BarrelOpening.rotation);
-            var bulletRigidbody = bullet.GetComponent<Rigidbody>();
-            bulletRigidbody.AddForce(BarrelOpening.forward * Speed);
-
-            RaycastHit hit;
-            if (Physics.Raycast(BarrelOpening.position, BarrelOpening.forward, out hit))
+            Debug.Log(hit.transform.gameObject);
+            var enemy = hit.collider.gameObject.GetComponentInParent<Enemy>();
+            if (enemy != null)
             {
-                Debug.Log(hit.transform.gameObject);
-                var targetScript = hit.collider.gameObject.GetComponentInParent<TargetBehaviour>();
-                if (targetScript != null)
-                {
-                    Debug.Log("Hit a target");
-                    targetScript.OnHit();
-                    TargetsHit += 1;
-                }
-                else
-                {
-                    Debug.Log("Missed :/");
-                }
-                Debug.DrawRay(BarrelOpening.position, hit.point, Color.green, 2.0f);
+                Debug.Log("Hit a enemy");
+                enemy.OnHit(1f);
+                TargetsHit += 1;
+            }
+            else
+            {
+                Debug.Log("Missed :/");
             }
             _lastShot = 0;
             CurrentAmmo -= 1;
             return true;
         }
-        else return false;
+        return false;
 
     }
     public bool Reload()
