@@ -16,7 +16,6 @@ public class BasePlayer : MonoBehaviour
     public int TargetsHit;
     public bool FullAuto;
     public int FiringCycle;
-    public float ExplosionRadius;
 
     public void UpdateRecoilTime()
     {
@@ -81,23 +80,10 @@ public class BasePlayer : MonoBehaviour
         {
             FiringMode++;
         }
-        if(Input.GetKeyDown(KeyCode.W) && !(FiringMode <= 0) )
+        if(Input.GetKeyDown(KeyCode.W) && (FiringMode > 0) )
         {
             FiringMode--;
         }
-        /*if(TargetsHit < 3)
-        {
-            FiringMode = 0;
-        }
-        if(TargetsHit >= 3 && TargetsHit <= 6)
-        {
-            FiringMode = 1;
-        }
-        if(TargetsHit >6)
-        {
-            FiringMode = 2;
-        }*/
-        
     }
 
     public void SetValuesByFiringMode(int firingMode)
@@ -128,7 +114,6 @@ public class BasePlayer : MonoBehaviour
             RecoilTime = 0.5f;
             FiringCycle = 1;
             FullAuto = false;
-            ExplosionRadius = 0.5f;
         }
     }
 }
