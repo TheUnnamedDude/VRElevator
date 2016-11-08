@@ -22,7 +22,7 @@ public class MouseLookShoot : BasePlayer {
             if (Input.GetMouseButtonDown(0))
             {
                 //inspirert av https://forum.unity3d.com/threads/help-with-burst-fire-script-solved.38040/
-                StartCoroutine(Shoot());
+                StartCoroutine(Burst());
             }
         }
         if(FullAuto)
@@ -41,7 +41,7 @@ public class MouseLookShoot : BasePlayer {
         
 	}
     //inspirert av https://forum.unity3d.com/threads/help-with-burst-fire-script-solved.38040/
-    IEnumerator Shoot()
+    IEnumerator Burst()
     {
         for(int i = 0; i < FiringCycle; i++)
         {

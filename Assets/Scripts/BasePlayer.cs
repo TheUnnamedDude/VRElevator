@@ -7,6 +7,7 @@ public class BasePlayer : MonoBehaviour
     public float Speed = 10;
     public Transform BarrelOpening;
     public Transform Bullet;
+    public Transform ExplosionSphere;
 
     public int CurrentAmmo;
     public float RecoilTime;
@@ -15,6 +16,7 @@ public class BasePlayer : MonoBehaviour
     public int TargetsHit = 0;
     public bool FullAuto;
     public int FiringCycle;
+    public float ExplosionRadius;
 
     public void UpdateRecoilTime()
     {
@@ -24,9 +26,11 @@ public class BasePlayer : MonoBehaviour
 
     public bool ShootBullet()
     {
+        
         if (CurrentAmmo < 1 || _lastShot < RecoilTime)
             return false;
 
+        CurrentAmmo -= 1;
         var bullet = (Transform)Instantiate(Bullet, BarrelOpening.position, BarrelOpening.rotation);
         var bulletRigidbody = bullet.GetComponent<Rigidbody>();
         bulletRigidbody.AddForce(BarrelOpening.forward * Speed);
@@ -35,24 +39,36 @@ public class BasePlayer : MonoBehaviour
         if (Physics.Raycast(BarrelOpening.position, BarrelOpening.forward, out hit))
         {
             Debug.Log(hit.transform.gameObject);
+            
             var enemy = hit.collider.gameObject.GetComponentInParent<Enemy>();
-            if (enemy != null)
+            if(FiringMode != 3)
             {
-                Debug.Log("Hit a enemy");
-                enemy.OnHit(1f);
-                TargetsHit += 1;
+                if (enemy != null)
+                {
+                    Debug.Log("Hit a enemy");
+                    enemy.OnHit(1f);
+                    //TargetsHit += 1;
+                }
+                else
+                {
+                    Debug.Log("Missed :/");
+                }
             }
-            else
+            else if (FiringMode == 3)
             {
-                Debug.Log("Missed :/");
+                Instantiate(ExplosionSphere, new Vector3(hit.point.x, hit.point.y, hit.point.z), Quaternion.identity);
             }
+            
+            
             _lastShot = 0;
-            CurrentAmmo -= 1;
+            
             return true;
         }
+        
         return false;
 
     }
+
     public bool Reload()
     {
         CurrentAmmo = FullAmmo;
@@ -61,7 +77,15 @@ public class BasePlayer : MonoBehaviour
 
     public void SetFiringMode()
     {
-        if(TargetsHit < 3)
+        if(Input.GetKeyDown(KeyCode.E) && (FiringMode < 3))
+        {
+            FiringMode++;
+        }
+        if(Input.GetKeyDown(KeyCode.W) && !(FiringMode <= 0) )
+        {
+            FiringMode--;
+        }
+        /*if(TargetsHit < 3)
         {
             FiringMode = 0;
         }
@@ -72,8 +96,8 @@ public class BasePlayer : MonoBehaviour
         if(TargetsHit >6)
         {
             FiringMode = 2;
-        }
-        //return 0;
+        }*/
+        
     }
 
     public void SetValuesByFiringMode(int FiringMode)
@@ -97,6 +121,14 @@ public class BasePlayer : MonoBehaviour
             RecoilTime = 0.05f;
             FiringCycle = 3;
             FullAuto = false;
+        }
+        if(FiringMode == 3)
+        {
+            FullAmmo = 5;
+            RecoilTime = 0.5f;
+            FiringCycle = 1;
+            FullAuto = false;
+            ExplosionRadius = 0.5f;
         }
     }
 }
