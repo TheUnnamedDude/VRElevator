@@ -55,6 +55,7 @@ public class Enemy : MonoBehaviour
 
     public void ResetEnemy()
     {
+        Alive = false;
         _health = MaxHealth;
         _animationEnded = false;
         _animationElapsed = 0;

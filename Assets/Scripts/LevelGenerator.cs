@@ -18,7 +18,6 @@ public class LevelGenerator : IInitializable, ITickable
     private System.Random _rng;
     private readonly Dictionary<ElevatorDirection, List<Enemy>> _enemies = new Dictionary<ElevatorDirection, List<Enemy>>();
     private Dictionary<Enemy, float> _spawnTime = new Dictionary<Enemy, float>();
-    private List<GameObject> _targets = new List<GameObject>();
     private int _visibleTargets = 0;
     private int _seed;
 
@@ -66,21 +65,22 @@ public class LevelGenerator : IInitializable, ITickable
         {
             _enemies[enemy.Direction].Add(enemy);
         }
-        foreach (var target in GameObject.FindGameObjectsWithTag("Target"))
-        {
-            _targets.Add(target);
-        }
         Reset();
     }
 
     public void Tick()
     {
+        var enemiesRemoved = new List<Enemy>();
         foreach (var pair in _spawnTime)
         {
-            if (!(pair.Value > _scoreManager.TimeElapsedForLevel))
+            if (pair.Value < _scoreManager.TimeElapsedForLevel)
                 continue;
             pair.Key.Show();
-            _spawnTime.Remove(pair.Key);
+            enemiesRemoved.Add(pair.Key);
+        }
+        foreach (var enemy in enemiesRemoved)
+        {
+            _spawnTime.Remove(enemy);
         }
         if (NumberOfVisibleTargets >= 0)
             return;
@@ -118,7 +118,7 @@ public class LevelGenerator : IInitializable, ITickable
         var spawnableEnemies = new List<Enemy>();
         for (var i = 0; i < directions; i++)
         {
-            var directionIndex = _rng.Next(availableDirections.Count);
+            var directionIndex = availableDirections.IndexOf(ElevatorDirection.North);//_rng.Next(availableDirections.Count);
             var direction = availableDirections[directionIndex];
             availableDirections.RemoveAt(directionIndex);
 

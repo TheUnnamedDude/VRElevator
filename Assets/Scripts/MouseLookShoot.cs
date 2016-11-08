@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using UnityEngine;
-using Zenject;
 
 public class MouseLookShoot : BasePlayer {
     public float Sens = 2f;

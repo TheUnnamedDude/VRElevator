@@ -1,5 +1,4 @@
-﻿﻿using UnityEngine;
-using Zenject;
+﻿using UnityEngine;
 
 public class MovingEnemy : Enemy
 {
@@ -18,29 +17,28 @@ public class MovingEnemy : Enemy
     void Update()
     {
         base.Update();
-        Movement();
+        if (Alive) {
+            Movement();
+        }
     }
 
     private void Movement()
     {
-        float step = speed * Time.deltaTime;
-        if (Alive)
+        var step = speed * Time.deltaTime;
+        if (!OnTheMove)
         {
-            if (!OnTheMove)
+            gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, _startPosition, step);
+            if (gameObject.transform.position == _startPosition)
             {
-                gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, _startPosition, step);
-                if (gameObject.transform.position == _startPosition)
-                {
-                    OnTheMove = true;
-                }
+                OnTheMove = true;
             }
-            else
+        }
+        else
+        {
+            gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, _path, step);
+            if (gameObject.transform.position == _path)
             {
-                gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, _path, step);
-                if (gameObject.transform.position == _path)
-                {
-                    OnTheMove = false;
-                }
+                OnTheMove = false;
             }
         }
     }
