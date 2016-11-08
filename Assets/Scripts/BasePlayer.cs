@@ -76,22 +76,22 @@ public class BasePlayer : MonoBehaviour
         //return 0;
     }
 
-    public void SetValuesByFiringMode(int FiringMode)
+    public void SetValuesByFiringMode(int firingMode)
     {
-        if(FiringMode == 0)
+        if (firingMode == 0)
         {
             FullAmmo = 6;
             RecoilTime = 0.1f;
             FullAuto = false;
             FiringCycle = 1;
         }
-        if(FiringMode == 1)
+        else if (firingMode == 1)
         {
             FullAmmo = 30;
             RecoilTime = 0.1f;
             FullAuto = true;
         }
-        if(FiringMode == 2)
+        else if (firingMode == 2)
         {
             FullAmmo = 30;
             RecoilTime = 0.05f;

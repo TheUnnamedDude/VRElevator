@@ -17,6 +17,7 @@ public class LevelGenerator : IInitializable
 
     private System.Random _rng;
     private Dictionary<ElevatorDirection, List<Enemy>> _enemies = new Dictionary<ElevatorDirection, List<Enemy>>();
+    private List<GameObject> _targets = new List<GameObject>();
     private int _seed;
 
     public int Seed
@@ -60,6 +61,10 @@ public class LevelGenerator : IInitializable
         foreach (var enemy in UnityObject.FindObjectsOfType<Enemy>())
         {
             _enemies[enemy.Direction].Add(enemy);
+        }
+        foreach (var target in GameObject.FindGameObjectsWithTag("Target"))
+        {
+            _targets.Add(target);
         }
         Reset();
     }
