@@ -11,9 +11,9 @@ public class BasePlayer : MonoBehaviour
 
     public int CurrentAmmo;
     public float RecoilTime;
-    public int FiringMode = 0;
+    public int FiringMode;
     public int FullAmmo;
-    public int TargetsHit = 0;
+    public int TargetsHit;
     public bool FullAuto;
     public int FiringCycle;
     public float ExplosionRadius;
@@ -100,22 +100,22 @@ public class BasePlayer : MonoBehaviour
         
     }
 
-    public void SetValuesByFiringMode(int FiringMode)
+    public void SetValuesByFiringMode(int firingMode)
     {
-        if(FiringMode == 0)
+        if (firingMode == 0)
         {
             FullAmmo = 6;
             RecoilTime = 0.1f;
             FullAuto = false;
             FiringCycle = 1;
         }
-        if(FiringMode == 1)
+        else if (firingMode == 1)
         {
             FullAmmo = 30;
             RecoilTime = 0.1f;
             FullAuto = true;
         }
-        if(FiringMode == 2)
+        else if (firingMode == 2)
         {
             FullAmmo = 30;
             RecoilTime = 0.05f;
