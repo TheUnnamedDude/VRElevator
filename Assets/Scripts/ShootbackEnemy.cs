@@ -15,7 +15,10 @@ public class ShootbackEnemy : Enemy
     void Update()
     {
         base.Update();
-        TargetPlayer();
+        if (Alive)
+        {
+            TargetPlayer();
+        }
     }
 
     private void LockOnTargetSound()
