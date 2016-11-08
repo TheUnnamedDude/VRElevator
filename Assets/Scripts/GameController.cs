@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using UnityEngine;
+﻿using UnityEngine;
 using Zenject;
 
 public class GameController : ITickable
@@ -11,6 +10,7 @@ public class GameController : ITickable
     private LevelGenerator _levelGenerator;
 
     private bool _running = true;
+    private float _slowMotionTimeLeft;
 
     public bool IsRunning
     {
@@ -24,6 +24,17 @@ public class GameController : ITickable
         {
               // TODO: Redo this
         }
+        if (_slowMotionTimeLeft <= 0)
+        {
+            _slowMotionTimeLeft -= Time.deltaTime;
+            Time.timeScale = 1f;
+        }
+    }
+
+    public void SetSlowMotion(float time)
+    {
+        _slowMotionTimeLeft = time;
+        Time.timeScale = 0.5f;
     }
 
     public void OnTargetDestroy(float points)
