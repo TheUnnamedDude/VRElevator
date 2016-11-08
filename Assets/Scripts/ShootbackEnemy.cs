@@ -3,7 +3,6 @@ using Zenject;
 
 public class ShootbackEnemy : Enemy
 {
-    private int TargetLives = 5;
     public float Timer;
     public GameObject Projectile;
     public AudioSource TargetLock;
@@ -37,5 +36,6 @@ public class ShootbackEnemy : Enemy
     private void ShootProjectile()
     {
         Instantiate(Projectile, gameObject.transform);
+        Debug.Log("PROJECTILE ON ITS WAY!");
     }
 }

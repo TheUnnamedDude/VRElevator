@@ -3,7 +3,6 @@ using Zenject;
 
 public class ProjectileFromShootbackTarget : Enemy
 {
-    private int ProjectileLives = 3;
     private float speed = 25;
     private Vector3 TargetPath;
     public AudioSource LoopingProjectileSound;
