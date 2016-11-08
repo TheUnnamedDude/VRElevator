@@ -35,7 +35,7 @@ public class LevelGenerator : IInitializable, ITickable
         set { _seed = value; }
     }
 
-    public int NumberOfVisibleTargets => NumberOfTargetsAlive + _spawnTime.Count;
+    public int NumberOfVisibleTargets { get { return NumberOfTargetsAlive + _spawnTime.Count; } }
 
     public int NumberOfTargetsAlive
     {
