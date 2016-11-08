@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.1275832, g: 0.13438055, b: 0.121172495, a: 1}
+  m_IndirectSpecularColor: {r: 0.12758338, g: 0.13438055, b: 0.1211725, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -189,8 +189,6 @@ MonoBehaviour:
   _settings:
     Elevator: {fileID: 339834004}
     Scene: {fileID: 731702098}
-    TargetPrefab: {fileID: 4000010074194646, guid: 16df2f83e2351b7488877ee433e26260,
-      type: 2}
 --- !u!114 &22483824
 MonoBehaviour:
   m_ObjectHideFlags: 0
