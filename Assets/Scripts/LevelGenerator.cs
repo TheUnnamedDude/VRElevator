@@ -4,7 +4,7 @@ using UnityEngine;
 using Zenject;
 using UnityObject = UnityEngine.Object;
 
-public class LevelGenerator : IInitializable
+public class LevelGenerator : IInitializable, ITickable
 {
     private readonly ElevatorDirection[] ALL_DIRECTIONS = {ElevatorDirection.North, ElevatorDirection.East,
             ElevatorDirection.South, ElevatorDirection.West};
@@ -16,8 +16,10 @@ public class LevelGenerator : IInitializable
     public double MaxDistance = 130;
 
     private System.Random _rng;
-    private Dictionary<ElevatorDirection, List<Enemy>> _enemies = new Dictionary<ElevatorDirection, List<Enemy>>();
+    private readonly Dictionary<ElevatorDirection, List<Enemy>> _enemies = new Dictionary<ElevatorDirection, List<Enemy>>();
+    private Dictionary<Enemy, float> _spawnTime = new Dictionary<Enemy, float>();
     private List<GameObject> _targets = new List<GameObject>();
+    private int _visibleTargets = 0;
     private int _seed;
 
     public int Seed
@@ -32,6 +34,8 @@ public class LevelGenerator : IInitializable
         }
         set { _seed = value; }
     }
+
+    public int NumberOfVisibleTargets => NumberOfTargetsAlive + _spawnTime.Count;
 
     public int NumberOfTargetsAlive
     {
@@ -69,6 +73,27 @@ public class LevelGenerator : IInitializable
         Reset();
     }
 
+    public void Tick()
+    {
+        foreach (var pair in _spawnTime)
+        {
+            if (!(pair.Value > _scoreManager.TimeElapsedForLevel))
+                continue;
+            pair.Key.Show();
+            _spawnTime.Remove(pair.Key);
+        }
+        if (NumberOfVisibleTargets >= 0)
+            return;
+
+        var enemies = _spawnTime.GetEnumerator();
+        if (enemies.MoveNext())
+        {
+            var enemy = enemies.Current.Key;
+            _spawnTime.Remove(enemy);
+        }
+        enemies.Dispose();
+    }
+
     public void Reset()
     {
         _rng = new System.Random(Seed);
@@ -100,11 +125,12 @@ public class LevelGenerator : IInitializable
             spawnableEnemies.AddRange(_enemies[direction]);
         }
         var numberOfSpawns = GetTargetSpawnsForLevel();
+        _spawnTime = new Dictionary<Enemy, float>();
         for (var i = 0; i < Math.Min(numberOfSpawns, spawnableEnemies.Count); i++)
         {
             var enemyIndex = _rng.Next(spawnableEnemies.Count);
             var enemy = spawnableEnemies[_rng.Next(enemyIndex)];
-            enemy.Show();
+            _spawnTime[enemy] = (float) (_rng.NextDouble() * (_scoreManager.ExpectedLevelTime / 2));
             spawnableEnemies.RemoveAt(enemyIndex);
         }
         Debug.Log("Spawned " + numberOfSpawns + " targets");

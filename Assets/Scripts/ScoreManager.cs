@@ -8,8 +8,6 @@ public class ScoreManager : ITickable
     private float _targetScore;
     private float _timeElapsed;
     private float _timeLimit;
-    private float _timeElapsedForLevel;
-    private float _expectedLevelTime;
     public float TimePointsLevelModifier = 0.2f;
     public float TimePointsPerSecond = 10.0f;
     public float TargetPointsLevelModifier = 0.2f;
@@ -25,6 +23,10 @@ public class ScoreManager : ITickable
 
     public bool GameOver { get { return TimeLeft > 0; }}
 
+    public float TimeElapsedForLevel { get; private set; }
+
+    public float ExpectedLevelTime { get; private set; }
+
     public void AddTargetScore(float score)
     {
         _targetScore += score * TargetPointsLevelModifier;
@@ -34,8 +36,8 @@ public class ScoreManager : ITickable
     {
         Level++;
         _timeScore += CalculateLevelTimeScore();
-        _timeElapsedForLevel = 0;
-        _expectedLevelTime = GetTimeForLevel();
+        TimeElapsedForLevel = 0;
+        ExpectedLevelTime = GetTimeForLevel();
         _timeLimit += GetTimeForLevel();
     }
 
@@ -47,14 +49,14 @@ public class ScoreManager : ITickable
     public void Tick()
     {
         _timeElapsed += Time.deltaTime;
-        _timeElapsedForLevel += Time.deltaTime;
+        TimeElapsedForLevel += Time.deltaTime;
     }
 
 
 
     private float CalculateLevelTimeScore()
     {
-        var spareTime = _timeElapsedForLevel - _expectedLevelTime;
+        var spareTime = TimeElapsedForLevel - ExpectedLevelTime;
         if (spareTime > 0)
         {
             return spareTime * TimePointsPerSecond * Level * TimePointsLevelModifier;
@@ -74,7 +76,7 @@ public class ScoreManager : ITickable
     public void Reset()
     {
         _timeElapsed = 0;
-        _timeElapsedForLevel = 0;
+        TimeElapsedForLevel = 0;
         _targetScore = 0;
         _timeScore = 0;
     }

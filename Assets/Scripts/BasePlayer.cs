@@ -10,9 +10,9 @@ public class BasePlayer : MonoBehaviour
 
     public int CurrentAmmo;
     public float RecoilTime;
-    public int FiringMode = 0;
+    public int FiringMode;
     public int FullAmmo;
-    public int TargetsHit = 0;
+    public int TargetsHit;
     public bool FullAuto;
     public int FiringCycle;
 
