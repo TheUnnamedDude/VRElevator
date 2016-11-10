@@ -5,7 +5,6 @@ public class ControllerManager : BasePlayer {
 
     private SteamVR_TrackedObject _trackedObject;
     private SteamVR_Controller.Device device;
-    private float _lastShot;
 
     public AudioClip Shot;
     public AudioClip Cock;

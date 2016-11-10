@@ -312,7 +312,7 @@ MonoBehaviour:
   AnimationTime: 1
   Direction: 5
   Timer: 0
-  Projectile: {fileID: 0}
+  Projectile: {fileID: 1000011946865356, guid: 5db4556df90a643a98b0a55b1f57e66c, type: 2}
   TargetLock: {fileID: 0}
 --- !u!114 &114000013022253528
 MonoBehaviour:

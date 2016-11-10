@@ -5,7 +5,13 @@ public class ShootbackEnemy : Enemy
 {
     public float Timer;
     public GameObject Projectile;
-    public AudioSource TargetLock;
+    private AudioSource _targetLock;
+
+    void Awake()
+    {
+        base.Awake();
+        _targetLock = GetComponent<AudioSource>();
+    }
 
     void Start()
     {
@@ -23,7 +29,7 @@ public class ShootbackEnemy : Enemy
 
     private void LockOnTargetSound()
     {
-        TargetLock.Play();
+        _targetLock.Play();
     }
 
     private void TargetPlayer()

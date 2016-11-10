@@ -70,7 +70,7 @@ public class ScoreManager : ITickable
     /// <returns>A float representing the time you gained in seconds</returns>
     private float GetTimeForLevel()
     {
-        return 7.0f;
+        return 14.0f;
     }
 
     public void Reset()
