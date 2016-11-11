@@ -61,8 +61,13 @@ public class BasePlayer : MonoBehaviour
             {
                 if (enemy != null)
                 {
+<<<<<<< HEAD
                     Debug.Log("Hit an enemy");
                     enemy.OnHit(Damage);
+=======
+                    Debug.Log("Hit a enemy");
+                    enemy.OnHit(1f);
+>>>>>>> a5d557ad2d3ed39cbc5d6415b774080785cecc0c
                 }
                 else
                 {
@@ -73,13 +78,15 @@ public class BasePlayer : MonoBehaviour
             {
                 Instantiate(ExplosionSphere, new Vector3(hit.point.x, hit.point.y, hit.point.z), Quaternion.identity);
             }
+<<<<<<< HEAD
             
+=======
+>>>>>>> a5d557ad2d3ed39cbc5d6415b774080785cecc0c
             _lastShot = 0;
             return true;
         }
         
         return false;
-
     }
 
     /*public bool Reload()
@@ -134,8 +141,13 @@ public class BasePlayer : MonoBehaviour
         }
         if(FiringMode == 3)
         {
+<<<<<<< HEAD
             energyDecrease = 50f;
             RecoilTime = 0.5f;
+=======
+            FullAmmo = 5;
+            RecoilTime = 2f;
+>>>>>>> a5d557ad2d3ed39cbc5d6415b774080785cecc0c
             FiringCycle = 1;
             FullAuto = false;
             Damage = 3f;

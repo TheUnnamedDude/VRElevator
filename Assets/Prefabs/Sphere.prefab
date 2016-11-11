@@ -22,9 +22,13 @@ GameObject:
   - 33: {fileID: 33000011696327296}
   - 135: {fileID: 135000012330866548}
   - 23: {fileID: 23000012376679472}
+<<<<<<< HEAD
   - 114: {fileID: 114000011929669010}
   - 198: {fileID: 198000013079786476}
   - 199: {fileID: 199000010894299572}
+=======
+  - 114: {fileID: 114000011238702186}
+>>>>>>> a5d557ad2d3ed39cbc5d6415b774080785cecc0c
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -81,7 +85,11 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000013818953072}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+<<<<<<< HEAD
 --- !u!114 &114000011929669010
+=======
+--- !u!114 &114000011238702186
+>>>>>>> a5d557ad2d3ed39cbc5d6415b774080785cecc0c
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -92,7 +100,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6d910d6a3517af4fbfe859c23548faa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   TimeToLive: 0.5
+=======
+  TimeToLive: 0.3
+>>>>>>> a5d557ad2d3ed39cbc5d6415b774080785cecc0c
 --- !u!135 &135000012330866548
 SphereCollider:
   m_ObjectHideFlags: 1
