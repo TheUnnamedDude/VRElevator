@@ -46,7 +46,6 @@ public class BasePlayer : MonoBehaviour
                 {
                     Debug.Log("Hit a enemy");
                     enemy.OnHit(1f);
-                    //TargetsHit += 1;
                 }
                 else
                 {
@@ -57,15 +56,11 @@ public class BasePlayer : MonoBehaviour
             {
                 Instantiate(ExplosionSphere, new Vector3(hit.point.x, hit.point.y, hit.point.z), Quaternion.identity);
             }
-            
-            
             _lastShot = 0;
-            
             return true;
         }
         
         return false;
-
     }
 
     public bool Reload()
@@ -111,7 +106,7 @@ public class BasePlayer : MonoBehaviour
         if(FiringMode == 3)
         {
             FullAmmo = 5;
-            RecoilTime = 0.5f;
+            RecoilTime = 2f;
             FiringCycle = 1;
             FullAuto = false;
         }

@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12758307, g: 0.1343804, b: 0.12117234, a: 1}
+  m_IndirectSpecularColor: {r: 0.12758338, g: 0.13438055, b: 0.1211725, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -358,7 +358,7 @@ Transform:
   m_Children:
   - {fileID: 1849687805}
   m_Father: {fileID: 280181083}
-  m_RootOrder: 5
+  m_RootOrder: 6
 --- !u!4 &56252715
 Transform:
   m_ObjectHideFlags: 0
@@ -812,7 +812,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4000013638838486, guid: 5bdc519992595574d97c53e2f552e9cb, type: 2}
       propertyPath: m_RootOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5bdc519992595574d97c53e2f552e9cb, type: 2}
@@ -1009,6 +1009,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 2134807778}
+  - {fileID: 2122118846}
   - {fileID: 1073254814}
   - {fileID: 1679496862}
   - {fileID: 525754905}
@@ -1752,6 +1753,48 @@ CanvasRenderer:
     type: 2}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 480250516}
+--- !u!1001 &521060329
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 280181083}
+    m_Modifications:
+    - target: {fileID: 4000011304391444, guid: 0235cdde89dbf524a9cf5b3f0ad766c7, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 59.92
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000011304391444, guid: 0235cdde89dbf524a9cf5b3f0ad766c7, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 54.66
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000011304391444, guid: 0235cdde89dbf524a9cf5b3f0ad766c7, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -106.33
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000011304391444, guid: 0235cdde89dbf524a9cf5b3f0ad766c7, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000011304391444, guid: 0235cdde89dbf524a9cf5b3f0ad766c7, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000011304391444, guid: 0235cdde89dbf524a9cf5b3f0ad766c7, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000011304391444, guid: 0235cdde89dbf524a9cf5b3f0ad766c7, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000011304391444, guid: 0235cdde89dbf524a9cf5b3f0ad766c7, type: 2}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 0235cdde89dbf524a9cf5b3f0ad766c7, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &525754901
 GameObject:
   m_ObjectHideFlags: 0
@@ -1887,7 +1930,7 @@ Transform:
   m_Children:
   - {fileID: 399386433}
   m_Father: {fileID: 280181083}
-  m_RootOrder: 3
+  m_RootOrder: 4
 --- !u!1 &572771761
 GameObject:
   m_ObjectHideFlags: 0
@@ -2223,6 +2266,7 @@ MonoBehaviour:
   Speed: 2
   BarrelOpening: {fileID: 760342275}
   Bullet: {fileID: 0}
+  ExplosionSphere: {fileID: 0}
   CurrentAmmo: 0
   RecoilTime: 0
   FiringMode: 0
@@ -2554,6 +2598,7 @@ MonoBehaviour:
   Speed: 2
   BarrelOpening: {fileID: 1198031443}
   Bullet: {fileID: 0}
+  ExplosionSphere: {fileID: 0}
   CurrentAmmo: 0
   RecoilTime: 0
   FiringMode: 0
@@ -3200,12 +3245,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114000012427975022, guid: fb17390ddcad9a5448bb3e9252d9c22a,
-        type: 2}
-      propertyPath: Projectile
-      value: 
-      objectReference: {fileID: 1000010029517664, guid: df2d26a0f97fd46efae527006a3f14f8,
-        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: fb17390ddcad9a5448bb3e9252d9c22a, type: 2}
   m_IsPrefabParent: 0
@@ -3832,7 +3871,7 @@ Transform:
   m_Children:
   - {fileID: 1198034469}
   m_Father: {fileID: 280181083}
-  m_RootOrder: 1
+  m_RootOrder: 2
 --- !u!1 &1089042527
 GameObject:
   m_ObjectHideFlags: 0
@@ -4322,7 +4361,7 @@ Transform:
   m_Children:
   - {fileID: 235906359}
   m_Father: {fileID: 280181083}
-  m_RootOrder: 4
+  m_RootOrder: 5
 --- !u!21 &1133866697
 Material:
   serializedVersion: 6
@@ -5855,6 +5894,8 @@ MonoBehaviour:
   Speed: 15000
   BarrelOpening: {fileID: 1354245542}
   Bullet: {fileID: 4000011502426420, guid: a99cbace2b08f834c85e3e86b90b0007, type: 2}
+  ExplosionSphere: {fileID: 4000013443663820, guid: 9bfe482a56b358e4a8d3040abff2e251,
+    type: 2}
   CurrentAmmo: 0
   RecoilTime: 0
   FiringMode: 0
@@ -6132,7 +6173,7 @@ Transform:
   m_Children:
   - {fileID: 1500137937}
   m_Father: {fileID: 280181083}
-  m_RootOrder: 2
+  m_RootOrder: 3
 --- !u!1 &1688879282
 GameObject:
   m_ObjectHideFlags: 0
@@ -6528,6 +6569,22 @@ Mesh:
   m_BakedConvexCollisionMesh: 
   m_BakedTriangleCollisionMesh: 
   m_MeshOptimized: 0
+--- !u!1 &1785481327 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 100034, guid: 7537ff89953e35c4e8381ed67e3686d7, type: 3}
+  m_PrefabInternal: {fileID: 1093888934}
+--- !u!65 &1785481331
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1785481327}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.7940035, y: 4.1517296, z: 2.9499813e-14}
+  m_Center: {x: 0, y: -1.6405065e-16, z: 0.023088077}
 --- !u!4 &1809194061
 Transform:
   m_ObjectHideFlags: 0
@@ -7572,6 +7629,11 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2110396684}
   m_Mesh: {fileID: 4300030, guid: d681d5c7fd5aba94bab128359b5dffcd, type: 3}
+--- !u!4 &2122118846 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4000011304391444, guid: 0235cdde89dbf524a9cf5b3f0ad766c7,
+    type: 2}
+  m_PrefabInternal: {fileID: 521060329}
 --- !u!1 &2125800709
 GameObject:
   m_ObjectHideFlags: 0
